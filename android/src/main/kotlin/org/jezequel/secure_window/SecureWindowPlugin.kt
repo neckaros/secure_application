@@ -1,6 +1,7 @@
 package org.jezequel.secure_window
 
 import android.app.Activity
+import android.util.Log
 import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -19,22 +20,27 @@ import androidx.lifecycle.OnLifecycleEvent
 
 /** SecureWindowPlugin */
 public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, LifecycleObserver {
-  private lateinit var activity: Activity
+  private var activity: Activity? = null
+  lateinit var instance: SecureWindowPlugin
 
   override fun onDetachedFromActivity() {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    print("HOOOOOO")
-    activity = binding.activity;
+    if (::instance.isInitialized)
+      instance.activity = binding.activity
+    else
+      this.activity = binding.activity
     val lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding) as Lifecycle
     lifecycle.addObserver(this)
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    print("HOOOOOO")
-    activity = binding.activity;
+    if (::instance.isInitialized)
+      instance.activity = binding.activity
+    else
+      this.activity = binding.activity
     val lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding) as Lifecycle
     lifecycle.addObserver(this)
   }
@@ -45,9 +51,9 @@ public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    instance = SecureWindowPlugin()
     val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "secure_window")
-    channel.setMethodCallHandler(SecureWindowPlugin())
-    print("HAAAAA")
+    channel.setMethodCallHandler(instance)
   }
 
   @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -69,20 +75,15 @@ public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "secure_window")
       channel.setMethodCallHandler(SecureWindowPlugin())
-      print("HIIIIIII")
     }
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "secure") {
-      if (activity != null) {
-        activity.window.addFlags(LayoutParams.FLAG_SECURE)
-      }
+      activity?.window?.addFlags(LayoutParams.FLAG_SECURE)
       result.success(true)
     } else if (call.method == "open") {
-      if (activity != null) {
-        activity.window.clearFlags(LayoutParams.FLAG_SECURE)
-      }
+      activity?.window?.clearFlags(LayoutParams.FLAG_SECURE)
         result.success(true)
     } else {
       result.success(true)
