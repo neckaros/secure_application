@@ -1,5 +1,6 @@
 package org.jezequel.secure_window
 
+import android.app.Activity
 import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -8,18 +9,50 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import android.view.WindowManager.LayoutParams;
+import androidx.lifecycle.Lifecycle
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter;
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+
 
 /** SecureWindowPlugin */
-public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler {
-  private final Activity activity;
+public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, LifecycleObserver {
+  private lateinit var activity: Activity
 
-  private MyPlugin(Activity activity) {
-    this.activity = activity;
+  override fun onDetachedFromActivity() {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    print("HOOOOOO")
+    activity = binding.activity;
+    val lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding) as Lifecycle
+    lifecycle.addObserver(this)
+  }
+
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    print("HOOOOOO")
+    activity = binding.activity;
+    val lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding) as Lifecycle
+    lifecycle.addObserver(this)
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+    //To change body of created functions use File | Settings | File Templates.
+  }
+
+
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    val channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "secure_window")
-    channel.setMethodCallHandler(SecureWindowPlugin(registrar.activity()));
+    val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "secure_window")
+    channel.setMethodCallHandler(SecureWindowPlugin())
+    print("HAAAAA")
+  }
+
+  @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+  fun connectListener() {
+    print("WE RESUMED")
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -35,17 +68,22 @@ public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "secure_window")
-      channel.setMethodCallHandler(SecureWindowPlugin(registrar.activity()))
+      channel.setMethodCallHandler(SecureWindowPlugin())
+      print("HIIIIIII")
     }
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "secure") {
-      getWindow().addFlags(LayoutParams.FLAG_SECURE)
+      if (activity != null) {
+        activity.window.addFlags(LayoutParams.FLAG_SECURE)
+      }
       result.success(true)
     } else if (call.method == "open") {
-      getWindow().removeFlags(LayoutParams.FLAG_SECURE)
-      result.success(true)
+      if (activity != null) {
+        activity.window.clearFlags(LayoutParams.FLAG_SECURE)
+      }
+        result.success(true)
     } else {
       result.success(true)
     }
