@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:secure_window/secure_window_provider.dart';
 import 'package:secure_window/secure_window_state.dart';
+import 'package:secure_window/secure_window.dart';
 
 class SecureApplication extends StatefulWidget {
   final Widget child;
@@ -37,6 +38,7 @@ class _SecureApplicationState extends State<SecureApplication>
             !secureWindowStateNotifier.value.locked) {
           secureWindowStateNotifier.lock();
         }
+        Future.delayed(Duration(milliseconds: 500)).then((_) => SecureWindow.unlock());
         if (secureWindowStateNotifier.secured &&
             secureWindowStateNotifier.value.locked) {
           if (widget.onNeedUnlock != null) {

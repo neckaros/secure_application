@@ -16,7 +16,7 @@ class SecureWindowStateNotifier extends ValueNotifier<SecureWindowState> {
   }
 
   void unlock() {
-    SecureWindow.unlock();
+    SecureWindow.unlock(); //lock from native is removed when resumed but why not!
     if (value.locked) {
       value = value.copyWith(locked: false);
       notifyListeners();
