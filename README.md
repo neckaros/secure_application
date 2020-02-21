@@ -8,9 +8,47 @@ Pluggin in iOS is in swift
 
 Pluggin in Android is in Kotlin / AndroidX libraries
 
+## Usage
+
+### Installation
+
+Add `secure_window` as a dependency in your pubspec.yaml file ([what?](https://flutter.io/using-packages/)).
+
+### Import
+
+Import secure_window:
+```dart
+import 'package:secure_window/secure_window.dart';
+```
+
+Add a top level SecureWindow
+```dart
+SecureApplication(
+        onNeedUnlock: (secure) => print(
+            'need unlock maybe use biometric to confirm and then use sercure.unlock()'),
+        child: MyAppContent(),
+)
+```
+
+Put the content you want to protect in a SecureGate (could be the whole app)
+```dart
+SecureGate(
+          blurr: 5,
+          lockedBuilder: (context, secureNotifier) => Center(
+              child: RaisedButton(
+            child: Text('test'),
+            onPressed: () => secureNotifier.unlock(),
+          )),
+          child: YouProtectedWidget(),
+)
+```
+
+## API Docs
+[API Reference](https://pub.dev/documentation/secure_window/latest/)
+
 ## Basic understanding
 
-The library is mainly controller via the **SecureWindowController** which can be
+The library is mainly controller via the [SecureWindowController](https://pub.dev/documentation/secure_window/latest/secure_window_state/SecureWindowController-class.html) which can be
 
 ### open
 like we were not even here!
@@ -53,14 +91,14 @@ When the user gets back to the app we wait for ~500ms to remove this view to all
 # Widgets
 
 ## SecureApplication
-
+[Api Doc](https://pub.dev/documentation/secure_window/latest/secure_application/SecureApplication-class.html)
 this widget is **required** and need to be a parent of any Gate
 it provides to its descendant a SecureWindowProvider that allow you to secure or open the application
 
 You can pass you own initialized SecureWindowController if you want to set default values
 
 ## SecureGate
-
+[Api Doc](https://pub.dev/documentation/secure_window/latest/secure_gate/SecureGate-class.html)
 The **child** of this widget will be below a blurry barrier (control the amount of **blurr** and **opacity** with its arguments)
 if the provided SecureWindowController is **locked**
 

@@ -2,6 +2,7 @@ import 'dart:async';
 export './secure_application.dart';
 export './secure_gate.dart';
 export './secure_window_provider.dart';
+export './secure_window_state.dart';
 
 import 'package:flutter/services.dart';
 
