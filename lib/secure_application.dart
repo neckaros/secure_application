@@ -3,11 +3,18 @@ import 'package:secure_window/secure_window_provider.dart';
 import 'package:secure_window/secure_window_state.dart';
 import 'package:secure_window/secure_window.dart';
 
+/// Widget to put near the root of your application
+/// 
+/// It will monitor app to lock it if it gets backgrounded
+/// and provide a [SecureWindoStateNotifier] to its children
 class SecureApplication extends StatefulWidget {
+  /// Child of the widget
   final Widget child;
+  /// This will remove IOs glass effect from native automatically. To set to true if you don't have a gate in the application
+  final bool autoUnlockNative;
   final void Function(SecureWindowStateNotifier secureWindowStateNotifier)
       onNeedUnlock;
-  const SecureApplication({Key key, this.child, this.onNeedUnlock})
+  const SecureApplication({Key key, this.child, this.onNeedUnlock, this.autoUnlockNative = false})
       : super(key: key);
 
   @override
@@ -17,6 +24,7 @@ class SecureApplication extends StatefulWidget {
 class _SecureApplicationState extends State<SecureApplication>
     with WidgetsBindingObserver {
   SecureWindowStateNotifier secureWindowStateNotifier;
+  bool _removeNativeOnNextFrame = false;
   @override
   void initState() {
     secureWindowStateNotifier = SecureWindowStateNotifier(SecureWindowState());
@@ -38,12 +46,17 @@ class _SecureApplicationState extends State<SecureApplication>
             !secureWindowStateNotifier.value.locked) {
           secureWindowStateNotifier.lock();
         }
-        Future.delayed(Duration(milliseconds: 500)).then((_) => SecureWindow.unlock());
         if (secureWindowStateNotifier.secured &&
             secureWindowStateNotifier.value.locked) {
           if (widget.onNeedUnlock != null) {
             widget.onNeedUnlock(secureWindowStateNotifier);
           }
+        }
+        secureWindowStateNotifier.resumed();
+        if (mounted) {
+          setState(() => _removeNativeOnNextFrame = true);
+        } else {
+          _removeNativeOnNextFrame = true;
         }
         super.didChangeAppLifecycleState(state);
         break;
@@ -61,6 +74,9 @@ class _SecureApplicationState extends State<SecureApplication>
 
   @override
   Widget build(BuildContext context) {
+    if (_removeNativeOnNextFrame && widget.autoUnlockNative) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => SecureWindow.unlock());
+    }
     return SecureWindowProvider(
       secureData: secureWindowStateNotifier,
       child: widget.child,

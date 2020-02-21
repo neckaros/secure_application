@@ -1,17 +1,26 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:secure_window/secure_window.dart';
 import 'package:secure_window/secure_window_provider.dart';
 import 'package:secure_window/secure_window_state.dart';
 
+/// Show a barrier above your content when the Lock is active
+/// 
+/// This widget must have a [SecureWindow] in its ancestors
 class SecureGate extends StatefulWidget {
+  /// Body shown when the barrier is not active
   final Widget child;
+  /// Builder for the child that will be displayed atop the barrier
   final Widget Function(
           BuildContext context, SecureWindowStateNotifier secureNotifier)
       lockedBuilder;
+  /// Amount of Blurr
   final int blurr;
+  /// Opacity of the lock barrier
+  final double opacity;
 
-  const SecureGate({Key key, this.child, this.blurr = 20, this.lockedBuilder})
+  const SecureGate({Key key, this.child, this.blurr = 20, this.opacity = 0.6, this.lockedBuilder})
       : super(key: key);
   @override
   _SecureGateState createState() => _SecureGateState();
@@ -22,6 +31,7 @@ class _SecureGateState extends State<SecureGate>
   bool _lock = false;
   AnimationController _gateVisibility;
   SecureWindowStateNotifier secureNotifier;
+  bool _removeNativeOnNextFrame = false;
 
   @override
   void initState() {
@@ -46,9 +56,16 @@ class _SecureGateState extends State<SecureGate>
     if (_lock == false && secureNotifier.locked == true) {
       _lock = true;
       _gateVisibility.value = 1;
+
     } else if (_lock == true && secureNotifier.locked == false) {
       _lock = false;
       _gateVisibility.animateBack(0).orCancel;
+    }
+    
+    if (mounted) {
+      setState(() => _removeNativeOnNextFrame = true);
+    } else {
+      _removeNativeOnNextFrame = true;
     }
   }
 
@@ -67,6 +84,11 @@ class _SecureGateState extends State<SecureGate>
 
   @override
   Widget build(BuildContext context) {
+    if (_removeNativeOnNextFrame) {
+      Future.delayed(Duration(milliseconds: 500)).then((_) =>  SecureWindow.unlock());
+      
+      _removeNativeOnNextFrame = false;
+    }
     return Stack(
       children: <Widget>[
         widget.child,
@@ -79,7 +101,7 @@ class _SecureGateState extends State<SecureGate>
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.grey.shade200
-                        .withOpacity(0.6 * _gateVisibility.value)),
+                        .withOpacity(widget.opacity * _gateVisibility.value)),
               ),
             ),
           ),

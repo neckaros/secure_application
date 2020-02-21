@@ -23,6 +23,10 @@ class SecureWindowStateNotifier extends ValueNotifier<SecureWindowState> {
     }
   }
 
+  void resumed() {
+    notifyListeners();
+  }
+
   void secure() {
     SecureWindow.secure();
     if (!value.secured) {

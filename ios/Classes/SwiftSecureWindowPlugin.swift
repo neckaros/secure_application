@@ -23,19 +23,24 @@ public class SwiftSecureWindowPlugin: NSObject, FlutterPlugin {
         if let window = UIApplication.shared.windows.filter({ (w) -> Bool in
                    return w.isHidden == false
         }).first {
-            let view = UIView(frame: window.frame)
-            view.tag = 99699
-            // 1
-            view.backgroundColor = UIColor(white: 1, alpha: self.opacity)
-            // 2
-            let blurEffect = UIBlurEffect(style: .extraLight)
-            // 3
-            let blurView = UIVisualEffectView(effect: blurEffect)
-            // 4
-            blurView.frame = view.bounds
-            view.addSubview(blurView)
-            window.addSubview(view)
-            window.bringSubviewToFront(view)
+            if let existingView = window.viewWithTag(99699) {
+                window.bringSubviewToFront(existingView)
+                return
+            } else {
+                let view = UIView(frame: window.frame)
+                view.tag = 99699
+                // 1
+                view.backgroundColor = UIColor(white: 1, alpha: self.opacity)
+                // 2
+                let blurEffect = UIBlurEffect(style: .extraLight)
+                // 3
+                let blurView = UIVisualEffectView(effect: blurEffect)
+                // 4
+                blurView.frame = view.bounds
+                view.addSubview(blurView)
+                window.addSubview(view)
+                window.bringSubviewToFront(view)
+            }
         }
     }
   }
