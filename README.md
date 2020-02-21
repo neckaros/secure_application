@@ -59,7 +59,7 @@ it provides to its descendant a SecureWindowProvider that allow you to secure or
 
 ## SecureGate
 
-The **child** of this widget will be below a blurry barrier (control the amount of blurr and opacity with its arguments)
+The **child** of this widget will be below a blurry barrier (control the amount of **blurr** and **opacity** with its arguments)
 if the provided SecureWindowController is **locked**
 
 # Because we all want to see code in a Readme
