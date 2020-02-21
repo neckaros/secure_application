@@ -4,6 +4,25 @@ This plugin allow you to protect your application content from view on demand
 
 <img src="https://raw.githubusercontent.com/neckaros/secure_window/master/android_appswitcher.JPG" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_window/master/Gate_ios.jpg" height="400" />
 
+## Basic understanding
+
+The library is mainly controller via the **SecureWindowController** which can be
+
+### open
+like we were not even here!
+
+### secured
+if the user switch app or leave app the content will not be visible in the app switcher
+and when it goes back to the app it will **lock** it
+
+
+
+### locked
+the child of the **SecureGate**s will be hidden bellow the blurry barrier
+
+### unlocked
+child is visible
+
 ## Example
 
 Look at example app to see a use case
@@ -31,5 +50,49 @@ When the user gets back to the app we wait for ~500ms to remove this view to all
 
 ## SecureApplication
 
-this widget is **requiredg** and need to be a parent of any Gate
+this widget is **required** and need to be a parent of any Gate
 it provides to its descendant a SecureWindowProvider that allow you to secure or open the application
+
+
+# Because we all want to see code in a Readme
+```dart
+Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SecureApplication(
+        onNeedUnlock: (secure) => print(
+            'need unlock maybe use biometric to confirm and then sercure.unlock()'),
+        child: SecureGate(
+          blurr: 5,
+          lockedBuilder: (context, secureNotifier) => Center(
+              child: RaisedButton(
+            child: Text('test'),
+            onPressed: () => secureNotifier.unlock(),
+          )),
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Plugin example app'),
+            ),
+            body: Center(
+              child: Builder(builder: (context) {
+                var valueNotifier = SecureWindowProvider.of(context);
+                return Column(
+                  children: <Widget>[
+                    Text('This is secure content'),
+                    MaterialButton(
+                      onPressed: () => valueNotifier.secure(),
+                      child: Text('secure'),
+                    ),
+                    MaterialButton(
+                      onPressed: () => valueNotifier.open(),
+                      child: Text('open'),
+                    )
+                  ],
+                );
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+```
