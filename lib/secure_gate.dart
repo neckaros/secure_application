@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:secure_window/secure_window.dart';
 import 'package:secure_window/secure_window_provider.dart';
 import 'package:secure_window/secure_window_state.dart';
 
@@ -43,6 +44,7 @@ class _SecureGateState extends State<SecureGate>
   bool _lock = false;
   AnimationController _gateVisibility;
   SecureWindowController _secureWindowController;
+  bool _removeNativeOnNextFrame = false;
 
   @override
   void initState() {
@@ -71,6 +73,12 @@ class _SecureGateState extends State<SecureGate>
       _lock = false;
       _gateVisibility.animateBack(0).orCancel;
     }
+
+    if (mounted) {
+      setState(() => _removeNativeOnNextFrame = true);
+    } else {
+      _removeNativeOnNextFrame = true;
+    }
   }
 
   void _handleChange() {
@@ -88,6 +96,12 @@ class _SecureGateState extends State<SecureGate>
 
   @override
   Widget build(BuildContext context) {
+    if (_removeNativeOnNextFrame) {
+      Future.delayed(Duration(milliseconds: 500))
+          .then((_) => SecureWindow.unlock());
+
+      _removeNativeOnNextFrame = false;
+    }
     return Stack(
       children: <Widget>[
         widget.child,

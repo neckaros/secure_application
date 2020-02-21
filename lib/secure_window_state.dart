@@ -34,6 +34,10 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
   }
 
   /// App will be secured and content will not be visible if user switch app
+  void resumed() {
+    notifyListeners();
+  }
+
   void secure() {
     SecureWindow.secure();
     if (!value.secured) {
