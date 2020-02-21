@@ -1,7 +1,7 @@
 name: secure_window
 description: Secure app content visibility when user leave app. It will hide content
   in the app switcher and display a frost barrier above locked content when the user get backs
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/neckaros/secure_window
 
 environment:

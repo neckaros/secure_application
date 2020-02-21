@@ -73,7 +73,7 @@ Look at example app to see a use case
 
 This tool does not impose a way to authenticate the user to give them back access to their content
 
-You are free to use your own Widget/Workflow to allow user to see their content once locked (cf **SecureWindow** widget argument **onNeedUnlock**)
+You are free to use your own Widget/Workflow to allow user to see their content once locked (cf **SecureApplication** widget argument [onNeedUnlock](https://pub.dev/documentation/secure_window/latest/secure_application/SecureApplication/onNeedUnlock.html))
 
 Therefore you can use any method you like:
 * Your own Widget for code Authentication

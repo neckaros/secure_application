@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:secure_window/secure_window_provider.dart';
 import 'package:secure_window/secure_window_state.dart';
 import 'package:secure_window/secure_window.dart';
+import 'package:secure_window/secure_window_controller.dart';
 
 /// Widget that will manage Secure Gates and visibility protection for your app content
 ///
@@ -13,8 +14,18 @@ class SecureApplication extends StatefulWidget {
 
   /// This will remove IOs glass effect from native automatically. To set to true if you don't have a gate in the application
   final bool autoUnlockNative;
+
+  /// Method will be called when the user switch back to your application
+  ///
+  /// you can manage from here a global process for authorizing the user to see hidden content
+  /// like maybe by using local_auth package
   final void Function(SecureWindowController secureWindowStateNotifier)
       onNeedUnlock;
+
+  /// controller of the [SecureApplication]
+  ///
+  /// Can be set to provide your own controller to the application
+  /// with your own starting values
   final SecureWindowController secureWindowController;
   const SecureApplication(
       {Key key,

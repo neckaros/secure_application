@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:secure_window/secure_window.dart';
 import 'package:secure_window/secure_window_provider.dart';
-import 'package:secure_window/secure_window_state.dart';
+import 'package:secure_window/secure_window_controller.dart';
 
 /// it will display a blurr over your content if locked
 ///

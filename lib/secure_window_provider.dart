@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:secure_window/secure_window_state.dart';
+import 'package:secure_window/secure_window_controller.dart';
 
-/// provider of a SecureWindowController for its children.
+/// [InheritedWidget] provider of a [SecureWindowController] for its children.
 ///
 /// Used internally by [SecureApplication]
 class SecureWindowProvider extends InheritedWidget {
