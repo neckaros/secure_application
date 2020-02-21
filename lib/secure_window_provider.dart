@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:secure_window/secure_window_state.dart';
 
+/// provider of a SecureWindowController for its children.
+///
+/// Used internally by [SecureApplication]
 class SecureWindowProvider extends InheritedWidget {
   const SecureWindowProvider({
     Key key,
@@ -9,9 +12,9 @@ class SecureWindowProvider extends InheritedWidget {
   })  : assert(child != null),
         super(key: key, child: child);
 
-  final SecureWindowStateNotifier secureData;
+  final SecureWindowController secureData;
 
-  static SecureWindowStateNotifier of(BuildContext context) {
+  static SecureWindowController of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<SecureWindowProvider>()
         .secureData;

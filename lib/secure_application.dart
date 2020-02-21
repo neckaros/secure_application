@@ -3,11 +3,20 @@ import 'package:secure_window/secure_window_provider.dart';
 import 'package:secure_window/secure_window_state.dart';
 import 'package:secure_window/secure_window.dart';
 
+/// Widget that will manage Secure Gates and visibility protection for your app content
+///
+/// Should be above any [SecureGate]
+/// provide to all it descendants a [SecureWindowController] that can be used to secure/open and lock/unlock
 class SecureApplication extends StatefulWidget {
   final Widget child;
-  final void Function(SecureWindowStateNotifier secureWindowStateNotifier)
+  final SecureWindowController secureWindowController;
+  final void Function(SecureWindowController secureWindowController)
       onNeedUnlock;
-  const SecureApplication({Key key, this.child, this.onNeedUnlock})
+  const SecureApplication(
+      {Key key,
+      @required this.child,
+      this.onNeedUnlock,
+      this.secureWindowController})
       : super(key: key);
 
   @override
@@ -16,10 +25,16 @@ class SecureApplication extends StatefulWidget {
 
 class _SecureApplicationState extends State<SecureApplication>
     with WidgetsBindingObserver {
-  SecureWindowStateNotifier secureWindowStateNotifier;
+  SecureWindowController _secureWindowController;
+
+  SecureWindowController get secureWindowController =>
+      widget.secureWindowController ?? _secureWindowController;
+
   @override
   void initState() {
-    secureWindowStateNotifier = SecureWindowStateNotifier(SecureWindowState());
+    if (secureWindowController == null) {
+      _secureWindowController = SecureWindowController(SecureWindowState());
+    }
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -34,22 +49,23 @@ class _SecureApplicationState extends State<SecureApplication>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        if (secureWindowStateNotifier.secured &&
-            !secureWindowStateNotifier.value.locked) {
-          secureWindowStateNotifier.lock();
+        if (secureWindowController.secured &&
+            !secureWindowController.value.locked) {
+          secureWindowController.lock();
         }
-        Future.delayed(Duration(milliseconds: 500)).then((_) => SecureWindow.unlock());
-        if (secureWindowStateNotifier.secured &&
-            secureWindowStateNotifier.value.locked) {
+        Future.delayed(Duration(milliseconds: 500))
+            .then((_) => SecureWindow.unlock());
+        if (secureWindowController.secured &&
+            secureWindowController.value.locked) {
           if (widget.onNeedUnlock != null) {
-            widget.onNeedUnlock(secureWindowStateNotifier);
+            widget.onNeedUnlock(secureWindowController);
           }
         }
         super.didChangeAppLifecycleState(state);
         break;
       case AppLifecycleState.paused:
-        if (secureWindowStateNotifier.secured) {
-          secureWindowStateNotifier.lock();
+        if (secureWindowController.secured) {
+          secureWindowController.lock();
         }
         super.didChangeAppLifecycleState(state);
         break;
@@ -62,7 +78,7 @@ class _SecureApplicationState extends State<SecureApplication>
   @override
   Widget build(BuildContext context) {
     return SecureWindowProvider(
-      secureData: secureWindowStateNotifier,
+      secureData: secureWindowController,
       child: widget.child,
     );
   }
