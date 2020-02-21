@@ -37,6 +37,9 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    dependencies {
+        provided rootProject.findProject(":flutter_plugin_android_lifecycle")
+    }
 }
 
 dependencies {
