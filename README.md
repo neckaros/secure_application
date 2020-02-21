@@ -57,6 +57,8 @@ When the user gets back to the app we wait for ~500ms to remove this view to all
 this widget is **required** and need to be a parent of any Gate
 it provides to its descendant a SecureWindowProvider that allow you to secure or open the application
 
+You can pass you own initialized SecureWindowController if you want to set default values
+
 ## SecureGate
 
 The **child** of this widget will be below a blurry barrier (control the amount of **blurr** and **opacity** with its arguments)
