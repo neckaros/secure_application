@@ -64,6 +64,22 @@ You can pass you own initialized SecureWindowController if you want to set defau
 The **child** of this widget will be below a blurry barrier (control the amount of **blurr** and **opacity** with its arguments)
 if the provided SecureWindowController is **locked**
 
+# Native workings
+
+## Android
+When **locked** we set the secure flag to true
+```kotlin
+activity?.window?.addFlags(LayoutParams.FLAG_SECURE)
+```
+When **opened** we remove the secure flag
+```kotlin
+activity?.window?.clearFlags(LayoutParams.FLAG_SECURE)
+```
+
+## iOS
+When app will become inactive we add a top view with a blurr filter
+We remove this app 500ms after the app become active to avoid your content form being breifly visible
+
 # Because we all want to see code in a Readme
 ```dart
 Widget build(BuildContext context) {
