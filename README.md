@@ -2,6 +2,7 @@
 
 This plugin allow you to protect your application content from view on demand
 
+<img src="https://raw.githubusercontent.com/neckaros/secure_window/master/android_appswitcher.JPG" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_window/master/Gate_ios.jpg" height="400" />
 
 ## Example
 
@@ -25,3 +26,10 @@ We might give an option to allow screenshot as an option if need arise
 ## iOS
 Contrary to Android we create a native frosted view over your app content so that content is not visible in the app switcher.
 When the user gets back to the app we wait for ~500ms to remove this view to allow time for the app to woke and flutter gate to draw
+
+# Widgets
+
+## SecureApplication
+
+this widget is **requiredg** and need to be a parent of any Gate
+it provides to its descendant a SecureWindowProvider that allow you to secure or open the application
