@@ -37,6 +37,10 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
   /// Is the application secured
   bool get secured => value.secured;
 
+  /// if paused lock will not be set when they get back to the app
+  /// could be usefull for example when you open an image or file picker
+  bool get paused => value.paused;
+
   /// notify listener of the [SecureWindowController.authenticationEvents] of a failure or success
   /// to allow them for example to clear sensitive data
   void sendAuthenticationEvent(SecureWindowAuthenticationStatus status) {
@@ -74,6 +78,25 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
         .unlock(); //lock from native is removed when resumed but why not!
     if (value.locked) {
       value = value.copyWith(locked: false);
+      notifyListeners();
+    }
+  }
+
+  /// temporary prevent the app from locking if use leave and come back to the app
+  void pause() {
+    SecureWindow.lock();
+    if (!value.paused) {
+      value = value.copyWith(paused: true);
+      notifyListeners();
+    }
+  }
+
+  /// app switching will again provoque a lock
+  void unpause() {
+    SecureWindow
+        .unlock(); //lock from native is removed when resumed but why not!
+    if (value.paused) {
+      value = value.copyWith(paused: false);
       notifyListeners();
     }
   }

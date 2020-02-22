@@ -50,20 +50,16 @@ SecureGate(
 
 The library is mainly controller via the [SecureWindowController](https://pub.dev/documentation/secure_window/latest/secure_window_state/SecureWindowController-class.html) which can be
 
-### open
-like we were not even here!
-
 ### secured
 if the user switch app or leave app the content will not be visible in the app switcher
 and when it goes back to the app it will **lock** it
 
-
-
 ### locked
 the child of the **SecureGate**s will be hidden bellow the blurry barrier
 
-### unlocked
-child is visible
+### paused
+even if secured **SecureGate**s will not activate when user comes back to the app
+
 
 ## Example
 

@@ -78,13 +78,31 @@ class _MyAppState extends State<MyApp> {
                 return ListView(
                   children: <Widget>[
                     Text('This is secure content'),
-                    RaisedButton(
-                      onPressed: () => valueNotifier.secure(),
-                      child: Text('secure'),
-                    ),
-                    RaisedButton(
-                      onPressed: () => valueNotifier.open(),
-                      child: Text('open'),
+                    ValueListenableBuilder<SecureWindowState>(
+                      valueListenable: valueNotifier,
+                      builder: (context, state, _) => state.secured
+                          ? Column(
+                              children: <Widget>[
+                                RaisedButton(
+                                  onPressed: () => valueNotifier.secure(),
+                                  child: Text('Open app'),
+                                ),
+                                state.paused
+                                    ? RaisedButton(
+                                        onPressed: () =>
+                                            valueNotifier.unpause(),
+                                        child: Text('resume security'),
+                                      )
+                                    : RaisedButton(
+                                        onPressed: () => valueNotifier.pause(),
+                                        child: Text('pause security'),
+                                      ),
+                              ],
+                            )
+                          : RaisedButton(
+                              onPressed: () => valueNotifier.secure(),
+                              child: Text('Secure app'),
+                            ),
                     ),
                     if (failedAuth == null)
                       Text(

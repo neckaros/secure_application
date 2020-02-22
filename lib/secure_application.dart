@@ -86,20 +86,23 @@ class _SecureApplicationState extends State<SecureApplication>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        if (secureWindowController.secured &&
-            !secureWindowController.value.locked) {
-          secureWindowController.lock();
-        }
-        if (secureWindowController.secured &&
-            secureWindowController.value.locked) {
-          if (widget.onNeedUnlock != null) {
-            var authStatus = await widget.onNeedUnlock(secureWindowController);
-            if (authStatus != null) {
-              secureWindowController.sendAuthenticationEvent(authStatus);
+        if (!secureWindowController.paused) {
+          if (secureWindowController.secured &&
+              !secureWindowController.value.locked) {
+            secureWindowController.lock();
+          }
+          if (secureWindowController.secured &&
+              secureWindowController.value.locked) {
+            if (widget.onNeedUnlock != null) {
+              var authStatus =
+                  await widget.onNeedUnlock(secureWindowController);
+              if (authStatus != null) {
+                secureWindowController.sendAuthenticationEvent(authStatus);
+              }
             }
           }
+          secureWindowController.resumed();
         }
-        secureWindowController.resumed();
         if (mounted) {
           setState(() => _removeNativeOnNextFrame = true);
         } else {
@@ -108,8 +111,10 @@ class _SecureApplicationState extends State<SecureApplication>
         super.didChangeAppLifecycleState(state);
         break;
       case AppLifecycleState.paused:
-        if (secureWindowController.secured) {
-          secureWindowController.lock();
+        if (!secureWindowController.paused) {
+          if (secureWindowController.secured) {
+            secureWindowController.lock();
+          }
         }
         super.didChangeAppLifecycleState(state);
         break;
