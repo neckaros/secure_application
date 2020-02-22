@@ -1,3 +1,8 @@
+## 2.0.4
+
+* fixes
+
+
 ## 2.0.3
 
 * fix SecureWindowController without listening to updates
