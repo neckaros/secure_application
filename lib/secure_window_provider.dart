@@ -21,8 +21,9 @@ class SecureWindowProvider extends InheritedWidget {
         ? context
             .dependOnInheritedWidgetOfExactType<SecureWindowProvider>()
             .secureData
-        : context
-            .getElementForInheritedWidgetOfExactType<SecureWindowProvider>();
+        : (context.getElementForInheritedWidgetOfExactType<
+                SecureWindowProvider>() as SecureWindowProvider)
+            .secureData;
   }
 
   @override

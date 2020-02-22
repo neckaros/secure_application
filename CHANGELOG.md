@@ -1,3 +1,8 @@
+## 2.0.3
+
+* fix SecureWindowController without listening to updates
+
+
 ## 2.0.2
 
 * you can now get SecureWindowController without listening to updates
