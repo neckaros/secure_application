@@ -22,7 +22,7 @@ class SecureGate extends StatefulWidget {
 
   /// amount of blurr to allow more or less of the child be visible when locked
   /// default to 20
-  final int blurr;
+  final double blurr;
 
   /// opacity of the blurr gate
   /// default to 0.6

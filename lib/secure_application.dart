@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:secure_window/secure_window_provider.dart';
 import 'package:secure_window/secure_window_state.dart';
@@ -19,21 +21,29 @@ class SecureApplication extends StatefulWidget {
   ///
   /// you can manage from here a global process for authorizing the user to see hidden content
   /// like maybe by using local_auth package
-  final void Function(SecureWindowController secureWindowStateNotifier)
-      onNeedUnlock;
+  final Future<SecureWindowAuthenticationStatus> Function(
+      SecureWindowController secureWindowStateNotifier) onNeedUnlock;
+
+  /// will be called if authentication failed
+  final VoidCallback onAuthenticationFailed;
+
+  /// will be called if authentication succeed
+  final VoidCallback onAuthenticationSucceed;
 
   /// controller of the [SecureApplication]
   ///
   /// Can be set to provide your own controller to the application
   /// with your own starting values
   final SecureWindowController secureWindowController;
-  const SecureApplication(
-      {Key key,
-      @required this.child,
-      this.onNeedUnlock,
-      this.secureWindowController,
-      this.autoUnlockNative = false})
-      : super(key: key);
+  const SecureApplication({
+    Key key,
+    @required this.child,
+    this.onNeedUnlock,
+    this.secureWindowController,
+    this.autoUnlockNative = false,
+    this.onAuthenticationFailed,
+    this.onAuthenticationSucceed,
+  }) : super(key: key);
 
   @override
   _SecureApplicationState createState() => _SecureApplicationState();
@@ -43,6 +53,8 @@ class _SecureApplicationState extends State<SecureApplication>
     with WidgetsBindingObserver {
   SecureWindowController _secureWindowController;
 
+  StreamSubscription _authStreamSubscription;
+
   SecureWindowController get secureWindowController =>
       widget.secureWindowController ?? _secureWindowController;
   bool _removeNativeOnNextFrame = false;
@@ -51,18 +63,27 @@ class _SecureApplicationState extends State<SecureApplication>
     if (secureWindowController == null) {
       _secureWindowController = SecureWindowController(SecureWindowState());
     }
+    _authStreamSubscription =
+        secureWindowController.authenticationEvents.listen((s) {
+      if (s == SecureWindowAuthenticationStatus.FAILED) {
+        widget.onAuthenticationFailed();
+      } else if (s == SecureWindowAuthenticationStatus.SUCCESS) {
+        widget.onAuthenticationSucceed();
+      }
+    });
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    _authStreamSubscription?.cancel();
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
         if (secureWindowController.secured &&
@@ -72,7 +93,10 @@ class _SecureApplicationState extends State<SecureApplication>
         if (secureWindowController.secured &&
             secureWindowController.value.locked) {
           if (widget.onNeedUnlock != null) {
-            widget.onNeedUnlock(secureWindowController);
+            var authStatus = await widget.onNeedUnlock(secureWindowController);
+            if (authStatus != null) {
+              secureWindowController.sendAuthenticationEvent(authStatus);
+            }
           }
         }
         secureWindowController.resumed();
