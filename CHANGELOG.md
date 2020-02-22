@@ -1,3 +1,7 @@
+## 2.0.2
+
+* you can now get SecureWindowController without listening to updates
+
 ## 2.0.1
 
 * you can now temporary pause the gate from appearing [SecureWindowController.pause()] for example when you show a native screen like the image picker

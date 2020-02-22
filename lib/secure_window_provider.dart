@@ -14,10 +14,15 @@ class SecureWindowProvider extends InheritedWidget {
 
   final SecureWindowController secureData;
 
-  static SecureWindowController of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<SecureWindowProvider>()
-        .secureData;
+  /// get the [SecureWindowController] of the context
+  /// Use [listen] = false if you are outside of a widget builder (example in init state or in a bloc)
+  static SecureWindowController of(BuildContext context, {bool listen = true}) {
+    return listen
+        ? context
+            .dependOnInheritedWidgetOfExactType<SecureWindowProvider>()
+            .secureData
+        : context
+            .getElementForInheritedWidgetOfExactType<SecureWindowProvider>();
   }
 
   @override
