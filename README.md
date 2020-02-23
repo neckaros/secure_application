@@ -70,6 +70,7 @@ depending on auth status
 * **secureApplicationController.authLogout()** will set it to **false**
 * **secureApplicationController.authSuccess()** will set it to **true**
 
+You could use the authenticationEvents for the same purpose as it is a BehaviorSubject stream
 
 ## Example
 

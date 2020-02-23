@@ -1,6 +1,7 @@
-## 3.0.1
+## 3.0.3
 
 * new authenticated information
+* autenticationEvents is now a BehaviorSubject stream
 
 ## 3.0.0
 

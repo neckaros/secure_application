@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:secure_application/secure_application_native.dart';
 import 'package:secure_application/secure_application_state.dart';
 
@@ -17,12 +18,13 @@ class SecureApplicationController
     extends ValueNotifier<SecureApplicationState> {
   SecureApplicationController(SecureApplicationState value) : super(value);
 
-  final StreamController<SecureApplicationAuthenticationStatus>
+  final BehaviorSubject<SecureApplicationAuthenticationStatus>
       _authenticationEventsController =
-      StreamController<SecureApplicationAuthenticationStatus>.broadcast();
+      BehaviorSubject<SecureApplicationAuthenticationStatus>();
 
   /// Broadcast stream that you can use to trigger succesffull or unsuccessfull event
-  ///
+  /// default to [SecureApplicationAuthenticationStatus.NONE]
+  /// [BehaviorSubject] stream so it will always emit last sent value as soon as you listen
   /// will trigger with the result of [SecureApllication.onNeedUnlock]
   /// ```dart
   /// SecureApplicationContrller.authentificationEvents.
@@ -60,6 +62,7 @@ class SecureApplicationController
     if (unlock) {
       this.unlock();
     }
+    notifyListeners();
   }
 
   void authSuccess({bool unlock = false}) {
@@ -69,6 +72,7 @@ class SecureApplicationController
     if (unlock) {
       this.unlock();
     }
+    notifyListeners();
   }
 
   void authLogout({bool unlock = false}) {
@@ -78,6 +82,7 @@ class SecureApplicationController
     if (unlock) {
       this.unlock();
     }
+    notifyListeners();
   }
 
   /// content under [SecureGate] will not be visible
