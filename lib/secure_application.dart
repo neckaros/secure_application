@@ -36,6 +36,9 @@ class SecureApplication extends StatefulWidget {
   /// will be called if authentication succeed
   final VoidCallback onAuthenticationSucceed;
 
+  /// will be called if authentication succeed
+  final VoidCallback onLogout;
+
   /// controller of the [SecureApplication]
   ///
   /// Can be set to provide your own controller to the application
@@ -49,6 +52,7 @@ class SecureApplication extends StatefulWidget {
     this.autoUnlockNative = false,
     this.onAuthenticationFailed,
     this.onAuthenticationSucceed,
+    this.onLogout,
   }) : super(key: key);
 
   @override
@@ -73,9 +77,13 @@ class _SecureApplicationState extends State<SecureApplication>
     _authStreamSubscription =
         secureApplicationController.authenticationEvents.listen((s) {
       if (s == SecureApplicationAuthenticationStatus.FAILED) {
-        widget.onAuthenticationFailed();
+        if (widget.onAuthenticationFailed != null)
+          widget.onAuthenticationFailed();
       } else if (s == SecureApplicationAuthenticationStatus.SUCCESS) {
-        widget.onAuthenticationSucceed();
+        if (widget.onAuthenticationSucceed != null)
+          widget.onAuthenticationSucceed();
+      } else if (s == SecureApplicationAuthenticationStatus.LOGOUT) {
+        if (widget.onLogout != null) widget.onLogout();
       }
     });
     super.initState();

@@ -1,3 +1,7 @@
+## 3.0.1
+
+* new authenticated information
+
 ## 3.0.0
 
 * Rename package

@@ -62,6 +62,14 @@ the child of the **SecureGate**s will be hidden bellow the blurry barrier
 ### paused
 even if secured **SecureGate**s will not activate when user comes back to the app
 
+### authenticated
+last authentication status. To help you manage visibility of some elements of your UI
+depending on auth status
+
+* **secureApplicationController.authFailed()** will set it to **false**
+* **secureApplicationController.authLogout()** will set it to **false**
+* **secureApplicationController.authSuccess()** will set it to **true**
+
 
 ## Example
 

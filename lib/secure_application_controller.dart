@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:secure_application/secure_application_native.dart';
 import 'package:secure_application/secure_application_state.dart';
 
-enum SecureApplicationAuthenticationStatus { SUCCESS, FAILED, NONE }
+enum SecureApplicationAuthenticationStatus { SUCCESS, FAILED, LOGOUT, NONE }
 
 /// main controller for the library
 ///
@@ -42,6 +42,11 @@ class SecureApplicationController
   /// could be usefull for example when you open an image or file picker
   bool get paused => value.paused;
 
+  /// helper that hold las authentication status
+  /// default to false
+  /// allow you to hide or show content depending on authentication status
+  bool get authenticated => value.authenticated;
+
   /// notify listener of the [SecureApplicationController.authenticationEvents] of a failure or success
   /// to allow them for example to clear sensitive data
   void sendAuthenticationEvent(SecureApplicationAuthenticationStatus status) {
@@ -49,6 +54,7 @@ class SecureApplicationController
   }
 
   void authFailed({bool unlock = false}) {
+    value = value.copyWith(authenticated: false);
     _authenticationEventsController
         .add(SecureApplicationAuthenticationStatus.FAILED);
     if (unlock) {
@@ -57,8 +63,18 @@ class SecureApplicationController
   }
 
   void authSuccess({bool unlock = false}) {
+    value = value.copyWith(authenticated: true);
     _authenticationEventsController
         .add(SecureApplicationAuthenticationStatus.SUCCESS);
+    if (unlock) {
+      this.unlock();
+    }
+  }
+
+  void authLogout({bool unlock = false}) {
+    value = value.copyWith(authenticated: false);
+    _authenticationEventsController
+        .add(SecureApplicationAuthenticationStatus.LOGOUT);
     if (unlock) {
       this.unlock();
     }
