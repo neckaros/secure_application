@@ -1,9 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:secure_window/secure_window.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('secure_window');
+  const MethodChannel channel = MethodChannel('secure_application');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 

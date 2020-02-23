@@ -1,4 +1,4 @@
-group 'org.jezequel.secure_window'
+group 'org.jezequel.secure_application'
 version '1.0-SNAPSHOT'
 
 buildscript {

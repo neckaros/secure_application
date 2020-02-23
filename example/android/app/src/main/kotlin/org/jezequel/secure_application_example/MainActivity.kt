@@ -1,4 +1,4 @@
-package org.jezequel.secure_window_example
+package org.jezequel.secure_application_example
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

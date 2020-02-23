@@ -1,4 +1,4 @@
-package org.jezequel.secure_window
+package org.jezequel.secure_application
 
 import android.app.Activity
 import android.util.Log
@@ -18,10 +18,10 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 
 
-/** SecureWindowPlugin */
-public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, LifecycleObserver {
+/** SecureApplicationPlugin */
+public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, LifecycleObserver {
   private var activity: Activity? = null
-  lateinit var instance: SecureWindowPlugin
+  lateinit var instance: SecureApplicationPlugin
 
   override fun onDetachedFromActivity() {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -51,8 +51,8 @@ public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
 
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    instance = SecureWindowPlugin()
-    val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "secure_window")
+    instance = SecureApplicationPlugin()
+    val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "secure_application")
     channel.setMethodCallHandler(instance)
   }
 
@@ -73,8 +73,8 @@ public class SecureWindowPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "secure_window")
-      channel.setMethodCallHandler(SecureWindowPlugin())
+      val channel = MethodChannel(registrar.messenger(), "secure_application")
+      channel.setMethodCallHandler(SecureApplicationPlugin())
     }
   }
 

@@ -1,5 +1,5 @@
-name: secure_window_example
-description: Demonstrates how to use the secure_window plugin.
+name: secure_application_example
+description: Demonstrates how to use the secure_application plugin.
 publish_to: 'none'
 
 environment:
@@ -17,7 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  secure_window:
+  secure_application:
     path: ../
 
 # For information on the generic Dart part of this file, see the

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secure_window/secure_window.dart';
+import 'package:secure_application/secure_application.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -29,10 +29,10 @@ class _MyAppState extends State<MyApp> {
           // var authResult = authMyUser();
           // if (authResul) {
           //  secure.unlock();
-          //  return SecureWindowAuthenticationStatus.SUCCESS;
+          //  return SecureApplicationAuthenticationStatus.SUCCESS;
           //}
           // else {
-          //  return SecureWindowAuthenticationStatus.FAILED;
+          //  return SecureApplicationAuthenticationStatus.FAILED;
           //}
           return null;
         },
@@ -74,11 +74,11 @@ class _MyAppState extends State<MyApp> {
             ),
             body: Center(
               child: Builder(builder: (context) {
-                var valueNotifier = SecureWindowProvider.of(context);
+                var valueNotifier = SecureApplicationProvider.of(context);
                 return ListView(
                   children: <Widget>[
                     Text('This is secure content'),
-                    ValueListenableBuilder<SecureWindowState>(
+                    ValueListenableBuilder<SecureApplicationState>(
                       valueListenable: valueNotifier,
                       builder: (context, state, _) => state.secured
                           ? Column(

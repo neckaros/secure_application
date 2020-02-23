@@ -1,31 +1,32 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:secure_window/secure_window.dart';
-import 'package:secure_window/secure_window_state.dart';
+import 'package:secure_application/secure_application_native.dart';
+import 'package:secure_application/secure_application_state.dart';
 
-enum SecureWindowAuthenticationStatus { SUCCESS, FAILED, NONE }
+enum SecureApplicationAuthenticationStatus { SUCCESS, FAILED, NONE }
 
 /// main controller for the library
 ///
 /// secured mean that the application will lock if the user switch out of the app
 /// on Android it will prevent user from taking screenshot/recordvideo in the app
 /// on iOS/Android it will hide content in the app switcher
-/// on iOS/Android it will lock [SecureWindowController.locked] = true when it become active again
+/// on iOS/Android it will lock [SecureApplicationController.locked] = true when it become active again
 /// when locked if a gate depends on this controller it will display the blurry gate to obfuscate content
-class SecureWindowController extends ValueNotifier<SecureWindowState> {
-  SecureWindowController(SecureWindowState value) : super(value);
+class SecureApplicationController
+    extends ValueNotifier<SecureApplicationState> {
+  SecureApplicationController(SecureApplicationState value) : super(value);
 
-  final StreamController<SecureWindowAuthenticationStatus>
+  final StreamController<SecureApplicationAuthenticationStatus>
       _authenticationEventsController =
-      StreamController<SecureWindowAuthenticationStatus>.broadcast();
+      StreamController<SecureApplicationAuthenticationStatus>.broadcast();
 
   /// Broadcast stream that you can use to trigger succesffull or unsuccessfull event
   ///
   /// will trigger with the result of [SecureApllication.onNeedUnlock]
   /// ```dart
-  /// secureWindowContrller.authentificationEvents.
-  Stream<SecureWindowAuthenticationStatus> get authenticationEvents =>
+  /// SecureApplicationContrller.authentificationEvents.
+  Stream<SecureApplicationAuthenticationStatus> get authenticationEvents =>
       _authenticationEventsController.stream;
 
   /// Is the application Locked
@@ -41,15 +42,15 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
   /// could be usefull for example when you open an image or file picker
   bool get paused => value.paused;
 
-  /// notify listener of the [SecureWindowController.authenticationEvents] of a failure or success
+  /// notify listener of the [SecureApplicationController.authenticationEvents] of a failure or success
   /// to allow them for example to clear sensitive data
-  void sendAuthenticationEvent(SecureWindowAuthenticationStatus status) {
+  void sendAuthenticationEvent(SecureApplicationAuthenticationStatus status) {
     _authenticationEventsController.add(status);
   }
 
   void authFailed({bool unlock = false}) {
     _authenticationEventsController
-        .add(SecureWindowAuthenticationStatus.FAILED);
+        .add(SecureApplicationAuthenticationStatus.FAILED);
     if (unlock) {
       this.unlock();
     }
@@ -57,7 +58,7 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
 
   void authSuccess({bool unlock = false}) {
     _authenticationEventsController
-        .add(SecureWindowAuthenticationStatus.SUCCESS);
+        .add(SecureApplicationAuthenticationStatus.SUCCESS);
     if (unlock) {
       this.unlock();
     }
@@ -65,7 +66,7 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
 
   /// content under [SecureGate] will not be visible
   void lock() {
-    SecureWindow.lock();
+    SecureApplicationNative.lock();
     if (!value.locked) {
       value = value.copyWith(locked: true);
       notifyListeners();
@@ -74,7 +75,7 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
 
   /// Use when you want your user to see content under [SecureGate]
   void unlock() {
-    SecureWindow
+    SecureApplicationNative
         .unlock(); //lock from native is removed when resumed but why not!
     if (value.locked) {
       value = value.copyWith(locked: false);
@@ -84,7 +85,7 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
 
   /// temporary prevent the app from locking if use leave and come back to the app
   void pause() {
-    SecureWindow.lock();
+    SecureApplicationNative.lock();
     if (!value.paused) {
       value = value.copyWith(paused: true);
       notifyListeners();
@@ -93,7 +94,7 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
 
   /// app switching will again provoque a lock
   void unpause() {
-    SecureWindow
+    SecureApplicationNative
         .unlock(); //lock from native is removed when resumed but why not!
     if (value.paused) {
       value = value.copyWith(paused: false);
@@ -111,7 +112,7 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
   ///
   /// on Android this will also prevent scrensshot/screen recording
   void secure() {
-    SecureWindow.secure();
+    SecureApplicationNative.secure();
     if (!value.secured) {
       value = value.copyWith(secured: true);
       notifyListeners();
@@ -120,7 +121,7 @@ class SecureWindowController extends ValueNotifier<SecureWindowState> {
 
   /// App will no longer be secured and content will be visible if user switch app
   void open() {
-    SecureWindow.open();
+    SecureApplicationNative.open();
     if (value.secured) {
       value = value.copyWith(secured: false);
       notifyListeners();

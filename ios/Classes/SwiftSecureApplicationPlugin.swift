@@ -1,7 +1,7 @@
 import Flutter
 import UIKit
 
-public class SwiftSecureWindowPlugin: NSObject, FlutterPlugin {
+public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
     var secured = false;
     var opacity: CGFloat = 0.2;
     internal let registrar: FlutterPluginRegistrar
@@ -13,8 +13,8 @@ public class SwiftSecureWindowPlugin: NSObject, FlutterPlugin {
     }
     
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "secure_window", binaryMessenger: registrar.messenger())
-    let instance = SwiftSecureWindowPlugin(registrar: registrar)
+    let channel = FlutterMethodChannel(name: "secure_application", binaryMessenger: registrar.messenger())
+    let instance = SwiftSecureApplicationPlugin(registrar: registrar)
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

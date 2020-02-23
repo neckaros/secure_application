@@ -1,14 +1,10 @@
 import 'dart:async';
-export './secure_application.dart';
-export './secure_gate.dart';
-export './secure_window_provider.dart';
-export './secure_window_state.dart';
-export './secure_window_controller.dart';
 
 import 'package:flutter/services.dart';
 
-class SecureWindow {
-  static const MethodChannel _channel = const MethodChannel('secure_window');
+class SecureApplicationNative {
+  static const MethodChannel _channel =
+      const MethodChannel('secure_application');
 
   static Future secure() {
     return _channel.invokeMethod('secure');

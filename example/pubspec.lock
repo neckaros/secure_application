@@ -130,13 +130,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  secure_window:
+  secure_application:
     dependency: "direct dev"
     description:
       path: ".."
       relative: true
     source: path
-    version: "2.0.4"
+    version: "3.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

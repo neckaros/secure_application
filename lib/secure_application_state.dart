@@ -1,23 +1,23 @@
 import 'package:flutter/foundation.dart';
 
-/// state hold by the [SecureWindowController]
+/// state hold by the [SecureApplicationController]
 @immutable
-class SecureWindowState {
+class SecureApplicationState {
   final bool locked;
   final bool secured;
   final bool paused;
-  SecureWindowState({
+  SecureApplicationState({
     this.locked = false,
     this.secured = false,
     this.paused = false,
   });
 
-  SecureWindowState copyWith({
+  SecureApplicationState copyWith({
     bool locked,
     bool secured,
     bool paused,
   }) {
-    return SecureWindowState(
+    return SecureApplicationState(
       locked: locked ?? this.locked,
       secured: secured ?? this.secured,
       paused: paused ?? this.paused,
