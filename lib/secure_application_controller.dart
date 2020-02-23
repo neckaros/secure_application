@@ -20,7 +20,8 @@ class SecureApplicationController
 
   final BehaviorSubject<SecureApplicationAuthenticationStatus>
       _authenticationEventsController =
-      BehaviorSubject<SecureApplicationAuthenticationStatus>();
+      BehaviorSubject<SecureApplicationAuthenticationStatus>.seeded(
+          SecureApplicationAuthenticationStatus.NONE);
 
   /// Broadcast stream that you can use to trigger succesffull or unsuccessfull event
   /// default to [SecureApplicationAuthenticationStatus.NONE]

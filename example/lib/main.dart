@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
                           ? Column(
                               children: <Widget>[
                                 RaisedButton(
-                                  onPressed: () => valueNotifier.secure(),
+                                  onPressed: () => valueNotifier.open(),
                                   child: Text('Open app'),
                                 ),
                                 state.paused
@@ -119,6 +119,11 @@ class _MyAppState extends State<MyApp> {
                             ),
                     FlutterLogo(
                       size: width,
+                    ),
+                    StreamBuilder(
+                      stream: valueNotifier.authenticationEvents,
+                      builder: (context, snapshot) =>
+                          Text('Last auth status is: ${snapshot.data}'),
                     ),
                     RaisedButton(
                       onPressed: () => valueNotifier.lock(),
