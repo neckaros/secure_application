@@ -1,3 +1,7 @@
+## 3.0.4
+
+* iOS new bringSubview(toFront:) instead of deprecated metho
+
 ## 3.0.3
 
 * new authenticated information
