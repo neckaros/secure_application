@@ -24,7 +24,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                    return w.isHidden == false
         }).first {
             if let existingView = window.viewWithTag(99699) {
-                window.bringSubview(toFront: existingView)
+                window.bringSubviewToFront(existingView)
                 return
             } else {
                 let view = UIView(frame: window.frame)
@@ -39,7 +39,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 blurView.frame = view.bounds
                 view.addSubview(blurView)
                 window.addSubview(view)
-                window.bringSubview(toFront: view)
+                window.bringSubviewToFront(view)
             }
         }
     }

@@ -20,7 +20,8 @@ class SecureApplication extends StatefulWidget {
   /// Child of the widget
   final Widget child;
 
-  /// This will remove IOs glass effect from native automatically. To set to true if you don't have a gate in the application
+  /// This will remove IOs glass effect from native automatically. To set to true (default) if you don't want to manage it
+  /// you can play with the [nativeRemoveDelay] to avoid iOS unsecure flicker
   final bool autoUnlockNative;
 
   /// Method will be called when the user switch back to your application
@@ -39,6 +40,10 @@ class SecureApplication extends StatefulWidget {
   /// will be called if authentication succeed
   final VoidCallback onLogout;
 
+  /// the time in milliseconds we wait to remove the native protection screen
+  /// usefull on iOS to let long app start
+  final int nativeRemoveDelay;
+
   /// controller of the [SecureApplication]
   ///
   /// Can be set to provide your own controller to the application
@@ -49,10 +54,11 @@ class SecureApplication extends StatefulWidget {
     @required this.child,
     this.onNeedUnlock,
     this.secureApplicationController,
-    this.autoUnlockNative = false,
+    this.autoUnlockNative = true,
     this.onAuthenticationFailed,
     this.onAuthenticationSucceed,
     this.onLogout,
+    this.nativeRemoveDelay,
   }) : super(key: key);
 
   @override
@@ -142,8 +148,10 @@ class _SecureApplicationState extends State<SecureApplication>
   @override
   Widget build(BuildContext context) {
     if (_removeNativeOnNextFrame && widget.autoUnlockNative) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => SecureApplicationNative.unlock());
+      Future.delayed(Duration(milliseconds: widget.nativeRemoveDelay))
+          .then((_) => SecureApplicationNative.unlock());
+
+      _removeNativeOnNextFrame = false;
     }
     return SecureApplicationProvider(
       secureData: secureApplicationController,

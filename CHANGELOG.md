@@ -1,3 +1,7 @@
+## 3.1.0
+
+* require swift 4.2+
+
 ## 3.0.7
 
 * allow to configure nativeRemoveDelay in secure_gate to let longer  app time to start especially on iOS

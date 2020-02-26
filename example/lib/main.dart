@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
     var width = MediaQuery.of(context).size.width * 0.8;
     return MaterialApp(
       home: SecureApplication(
+          nativeRemoveDelay: 1000,
         onNeedUnlock: (secure) async {
           print(
               'need unlock maybe use biometric to confirm and then sercure.unlock() or you can use the lockedBuilder');

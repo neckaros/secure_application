@@ -116,8 +116,6 @@ class SecureApplicationController
 
   /// app switching will again provoque a lock
   void unpause() {
-    SecureApplicationNative
-        .unlock(); //lock from native is removed when resumed but why not!
     if (value.paused) {
       value = value.copyWith(paused: false);
       notifyListeners();
