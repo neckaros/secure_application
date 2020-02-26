@@ -103,17 +103,17 @@ class _SecureApplicationState extends State<SecureApplication>
       case AppLifecycleState.resumed:
         if (!secureApplicationController.paused) {
           if (secureApplicationController.secured &&
-              !secureApplicationController.value.locked) {
-            secureApplicationController.lock();
-          }
-          if (secureApplicationController.secured &&
               secureApplicationController.value.locked) {
             if (widget.onNeedUnlock != null) {
+              secureApplicationController.pause();
               var authStatus =
                   await widget.onNeedUnlock(secureApplicationController);
               if (authStatus != null) {
                 secureApplicationController.sendAuthenticationEvent(authStatus);
               }
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                secureApplicationController.unpause();
+              });
             }
           }
           secureApplicationController.resumed();

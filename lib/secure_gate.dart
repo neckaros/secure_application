@@ -27,12 +27,17 @@ class SecureGate extends StatefulWidget {
   /// default to 0.6
   final double opacity;
 
+  /// the time in milliseconds we wait to remove the native protection screen
+  /// usefull on iOS to let long app start
+  final int nativeRemoveDelay;
+
   const SecureGate({
     Key key,
     this.child,
     this.blurr = 20,
     this.opacity = 0.6,
     this.lockedBuilder,
+    this.nativeRemoveDelay = 1000,
   }) : super(key: key);
   @override
   _SecureGateState createState() => _SecureGateState();
@@ -96,7 +101,7 @@ class _SecureGateState extends State<SecureGate>
   @override
   Widget build(BuildContext context) {
     if (_removeNativeOnNextFrame) {
-      Future.delayed(Duration(milliseconds: 500))
+      Future.delayed(Duration(milliseconds: widget.nativeRemoveDelay))
           .then((_) => SecureApplicationNative.unlock());
 
       _removeNativeOnNextFrame = false;

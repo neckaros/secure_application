@@ -1,6 +1,11 @@
-## 3.0.4
+## 3.0.7
+
+* allow to configure nativeRemoveDelay in secure_gate to let longer  app time to start especially on iOS
+
+## 3.0.6
 
 * iOS new bringSubview(toFront:) instead of deprecated metho
+* pause during needunlock to prevent ios unlock loop when using faceid
 
 ## 3.0.3
 
