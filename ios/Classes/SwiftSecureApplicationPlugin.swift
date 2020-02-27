@@ -20,6 +20,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
 
   public func applicationWillResignActive(_ application: UIApplication) {
     if ( secured ) {
+        UIApplication.shared.ignoreSnapshotOnNextApplicationLaunch()
         if let window = UIApplication.shared.windows.filter({ (w) -> Bool in
                    return w.isHidden == false
         }).first {
@@ -43,7 +44,11 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
             }
         }
     }
+    RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
   }
+    public func applicationDidEnterBackground(_ application: UIApplication) {
+        RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
+    }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if (call.method == "secure") {
