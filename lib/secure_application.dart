@@ -107,6 +107,11 @@ class _SecureApplicationState extends State<SecureApplication>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
+        if (mounted) {
+          setState(() => _removeNativeOnNextFrame = true);
+        } else {
+          _removeNativeOnNextFrame = true;
+        }
         if (!secureApplicationController.paused) {
           if (secureApplicationController.secured &&
               secureApplicationController.value.locked) {
@@ -123,11 +128,6 @@ class _SecureApplicationState extends State<SecureApplication>
             }
           }
           secureApplicationController.resumed();
-        }
-        if (mounted) {
-          setState(() => _removeNativeOnNextFrame = true);
-        } else {
-          _removeNativeOnNextFrame = true;
         }
         super.didChangeAppLifecycleState(state);
         break;

@@ -1,3 +1,7 @@
+## 3.1.2
+
+* iOS fix
+
 ## 3.1.1
 
 * require swift 4.2+
