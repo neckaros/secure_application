@@ -29,6 +29,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 return
             } else {
                 let view = UIView(frame: window.frame)
+                view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 view.tag = 99699
                 // 1
                 view.backgroundColor = UIColor(white: 1, alpha: self.opacity)
