@@ -28,20 +28,19 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 window.bringSubviewToFront(existingView)
                 return
             } else {
-                let view = UIView(frame: window.frame)
-                view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                view.tag = 99699
-                // 1
-                view.backgroundColor = UIColor(white: 1, alpha: self.opacity)
-                // 2
-                let blurEffect = UIBlurEffect(style: .extraLight)
-                // 3
-                let blurView = UIVisualEffectView(effect: blurEffect)
-                // 4
-                blurView.frame = view.bounds
-                view.addSubview(blurView)
-                window.addSubview(view)
-                window.bringSubviewToFront(view)
+                
+                let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
+                let blurEffectView = UIVisualEffectView(effect: blurEffect)
+                blurEffectView.frame = window.bounds
+                blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                
+                blurEffectView.tag = 99699
+                blurEffectView.backgroundColor = UIColor(white: 1, alpha: self.opacity)
+                window.addSubview(blurEffectView)
+                
+                window.bringSubviewToFront(blurEffectView)
+                
+             
             }
         }
     }

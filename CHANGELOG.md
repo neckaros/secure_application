@@ -1,3 +1,7 @@
+## 3.2.0
+
+* iOS works on iPad when you rotate after closing
+
 ## 3.1.2
 
 * iOS fix
