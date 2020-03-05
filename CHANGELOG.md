@@ -1,3 +1,7 @@
+## 3.3.0
+
+* New behavior stream for lock/unlock event so you can react to them in your application
+
 ## 3.2.0
 
 * iOS works on iPad when you rotate after closing

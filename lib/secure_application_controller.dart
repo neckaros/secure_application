@@ -23,14 +23,20 @@ class SecureApplicationController
       BehaviorSubject<SecureApplicationAuthenticationStatus>.seeded(
           SecureApplicationAuthenticationStatus.NONE);
 
-  /// Broadcast stream that you can use to trigger succesffull or unsuccessfull event
+  /// Broadcast stream that you can use to react to succesffull or unsuccessfull event
   /// default to [SecureApplicationAuthenticationStatus.NONE]
   /// [BehaviorSubject] stream so it will always emit last sent value as soon as you listen
   /// will trigger with the result of [SecureApllication.onNeedUnlock]
-  /// ```dart
-  /// SecureApplicationContrller.authentificationEvents.
   Stream<SecureApplicationAuthenticationStatus> get authenticationEvents =>
       _authenticationEventsController.stream;
+
+  final BehaviorSubject<bool> _lockEventsController =
+      BehaviorSubject<bool>.seeded(false);
+
+  /// Broadcast stream that you can use to react to lock/unlock event
+  /// default to [false]
+  /// [BehaviorSubject] stream so it will always emit last sent value as soon as you listen
+  Stream<bool> get lockEvents => _lockEventsController.stream;
 
   /// Is the application Locked
   /// if locked gates will hide their children content
@@ -92,6 +98,7 @@ class SecureApplicationController
     if (!value.locked) {
       value = value.copyWith(locked: true);
       notifyListeners();
+      _lockEventsController.add(true);
     }
   }
 
@@ -102,6 +109,7 @@ class SecureApplicationController
     if (value.locked) {
       value = value.copyWith(locked: false);
       notifyListeners();
+      _lockEventsController.add(false);
     }
   }
 
@@ -151,6 +159,7 @@ class SecureApplicationController
   @override
   void dispose() {
     _authenticationEventsController.close();
+    _lockEventsController.close();
     super.dispose();
   }
 }
