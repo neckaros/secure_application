@@ -72,6 +72,12 @@ depending on auth status
 
 You could use the authenticationEvents for the same purpose as it is a BehaviorSubject stream
 
+### Streams
+There is two different BehaviorStream (emit last value when you subscribe):
+
+* **authenticationEvents**:  When there is a successful or unsucessful authentification (you can use it for example to clean your app if authentification is not successful)
+* **lockEvents**: Will be called when the application lock or unlock. Usefull for example to pause media when the app lock
+
 ## Example
 
 Look at example app to see a use case
