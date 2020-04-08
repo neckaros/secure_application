@@ -1,6 +1,6 @@
 ## 3.3.1
 
-* Fix #1 if you wanted to start the application locked
+* Fix if you wanted to start the application locked. issue: https://github.com/neckaros/secure_application/issues/1
 
 ## 3.3.0
 
