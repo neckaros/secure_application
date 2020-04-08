@@ -1,3 +1,7 @@
+## 3.3.1
+
+* Fix #1 if you wanted to start the application locked
+
 ## 3.3.0
 
 * New behavior stream for lock/unlock event so you can react to them in your application

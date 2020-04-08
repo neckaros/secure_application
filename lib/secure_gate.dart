@@ -58,7 +58,7 @@ class _SecureGateState extends State<SecureGate>
     if (_secureApplicationController == null) {
       _secureApplicationController = SecureApplicationProvider.of(context);
       _secureApplicationController.addListener(_sercureNotified);
-      _gateVisibility.value = _secureApplicationController.locked ? 1 : 0;
+      _sercureNotified();
     }
     super.didChangeDependencies();
   }
