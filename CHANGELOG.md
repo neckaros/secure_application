@@ -1,3 +1,7 @@
+## 3.3.2
+
+* Fix not implemented exception on Android when you exit the app
+
 ## 3.3.1
 
 * Fix if you wanted to start the application locked. issue: https://github.com/neckaros/secure_application/issues/1

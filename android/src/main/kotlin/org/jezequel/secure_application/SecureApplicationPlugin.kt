@@ -24,7 +24,7 @@ public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, Activity
   lateinit var instance: SecureApplicationPlugin
 
   override fun onDetachedFromActivity() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    // not used for now but might be used to add some features in the future
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
@@ -46,7 +46,7 @@ public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, Activity
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-    //To change body of created functions use File | Settings | File Templates.
+    // not used for now but might be used to add some features in the future
   }
 
 
@@ -58,7 +58,7 @@ public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, Activity
 
   @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
   fun connectListener() {
-    print("WE RESUMED")
+    // not used for now but might be used to add some features in the future
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
