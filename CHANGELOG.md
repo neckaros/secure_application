@@ -1,3 +1,7 @@
+## 3.4.0
+
+* Opacity is now propagated to IOS protection on task switcher
+  
 ## 3.3.2
 
 * Fix not implemented exception on Android when you exit the app
