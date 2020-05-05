@@ -21,4 +21,8 @@ class SecureApplicationNative {
   static Future unlock() {
     return _channel.invokeMethod('unlock');
   }
+
+  static Future opacity(double opacity) {
+    return _channel.invokeMethod('opacity', {"opacity": opacity});
+  }
 }

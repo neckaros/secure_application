@@ -49,6 +49,7 @@ class _SecureGateState extends State<SecureGate>
     _gateVisibility =
         AnimationController(vsync: this, duration: kThemeAnimationDuration * 2)
           ..addListener(_handleChange);
+    SecureApplicationNative.opacity(widget.opacity);
 
     super.initState();
   }
@@ -61,6 +62,14 @@ class _SecureGateState extends State<SecureGate>
       _sercureNotified();
     }
     super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(SecureGate oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.opacity != widget.opacity) {
+      SecureApplicationNative.opacity(widget.opacity);
+    }
   }
 
   void _sercureNotified() {
