@@ -1,5 +1,9 @@
 ## 3.4.1
 
+* Upgrade to RxDart 0.24.0
+  
+## 3.4.1
+
 * Opacity is now propagated to IOS protection on task switcher
   
 ## 3.3.2
