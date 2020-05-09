@@ -46,7 +46,7 @@ SecureGate(
 ```
 
 ## Tips
-# Placement
+### Placement
 Best place to add the secure application is directly **inside** the MaterialApp by using its builder:
 ```dart
 class MyApp extends StatelessWidget {
@@ -132,7 +132,7 @@ Notice 3 importants part here:
 * I wrap the route i want to protect in onGenerateRoute with a **SecureGate** but you could put it anywhare you want if you only want to protect part of your page
 * Ask validation will display a dialog above everything to ask is you want to unlock app or not
 
-# react to failed auth
+### react to failed auth
 ```dart
 class SecureReacting extends StatefulWidget {
   @override
