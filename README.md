@@ -14,7 +14,7 @@ Pluggin in Android is in Kotlin / AndroidX libraries
 
 ### Installation
 
-Add `secure_application` as a dependency in your pubspec.yaml file ([what?](https://flutter.io/using-packages/)).
+Add `secure_application` as a dependency in your pubspec.yaml file ([what?](https://pub.dev/packages/secure_application#-installing-tab-)).
 
 ### Import
 
