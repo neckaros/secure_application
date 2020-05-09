@@ -29,7 +29,7 @@ class SecureApplication extends StatefulWidget {
   /// you can manage from here a global process for authorizing the user to see hidden content
   /// like maybe by using local_auth package
   final Future<SecureApplicationAuthenticationStatus> Function(
-      SecureApplicationController SecureApplicationStateNotifier) onNeedUnlock;
+      SecureApplicationController secureApplicationStateNotifier) onNeedUnlock;
 
   /// will be called if authentication failed
   final VoidCallback onAuthenticationFailed;
