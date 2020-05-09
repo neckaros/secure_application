@@ -1,3 +1,7 @@
+## 3.5.1
+
+* Documentation tips
+  
 ## 3.5.0
 
 * Upgrade to RxDart 0.24.0
