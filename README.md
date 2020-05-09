@@ -45,6 +45,138 @@ SecureGate(
 )
 ```
 
+## Tips
+# Placement
+Best place to add the secure application is directly **inside** the MaterialApp by using its builder:
+```dart
+class MyApp extends StatelessWidget {
+  final navigatorKey = GlobalKey<NavigatorState>();
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        navigatorKey: navigatorKey,
+        localizationsDelegates: [
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
+        // debugShowCheckedModeBanner: false,
+        title: 'Your Fancy App',
+        darkTheme: YourDarkTheme,
+        theme: YourTheme,
+        onGenerateRoute: _generateRoute,
+        builder: (context, child) => SecureApplication(
+          nativeRemoveDelay: 800,
+          onNeedUnlock: (secureApplicationController) async {
+            var authResult = await auth(
+                askValidation: () => askValidation(context, child),
+                validationForFaceOnly: false);
+            if (authResult) {
+              secureApplicationController.authSuccess(unlock: true);
+            } else {
+              secureApplicationController.authFailed(unlock: true);
+              secureApplicationController.open();
+            }
+            return null;
+          },
+          child: child,
+        ),
+      );
+
+  Route<dynamic> _generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/splash':
+        return MaterialPageRoute(builder: (context) => Container());
+      default:
+        return MaterialPageRoute(
+            builder: (context) =>
+                SecureGate(blurr: 60, opacity: 0.8, child: DecisionPage()));
+    }
+  }
+
+  Future<bool> askValidation(BuildContext context, Widget navigator) async {
+    if (navigator is Navigator) {
+      final context = navigatorKey.currentState.overlay.context;
+      return await showDialog<bool>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Unlock app content'),
+            content: Text(
+                'Do you wan to unlock the application content? Clicking no will secure the app'),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                child: Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Yes'),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+}
+```
+
+Notice 3 importants part here: 
+* Secure application is in MaterialApp/Builder so just above your app naviagator
+* I wrap the route i want to protect in onGenerateRoute with a **SecureGate** but you could put it anywhare you want if you only want to protect part of your page
+* Ask validation will display a dialog above everything to ask is you want to unlock app or not
+
+# react to failed auth
+```dart
+class SecureReacting extends StatefulWidget {
+  @override
+  _SecureReactingState createState() => _SecureReactingState();
+}
+
+class _SecureReactingState extends State<SecureReacting> {
+  bool locked = false;
+  StreamSubscription<SecureApplicationAuthenticationStatus> _authEventsSub;
+  @override
+  void initState() {
+    super.initState();
+    var lockController = SecureApplicationProvider.of(context, listen: false);
+    _authEventsSub = lockController.authenticationEvents
+        .where((s) => s == SecureApplicationAuthenticationStatus.FAILED)
+        .listen((_) => lock());
+  }
+
+  void lock() {
+    if (mounted) {
+      setState(() => locked = true);
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _authEventsSub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return locked ? Container() : Container();
+  }
+}
+```
+
+Notice 2 importants part here: 
+* You are subscribing to a stream so don't forget to unsubscribe in onDispose
+* Since your animation from pop can take some time you might want also to have a locked variable here to display different content during transition
+
+
+
 ## API Docs
 [API Reference](https://pub.dev/documentation/secure_application/latest/)
 
