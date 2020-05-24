@@ -4,6 +4,9 @@ import UIKit
 public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
     var secured = false;
     var opacity: CGFloat = 0.2;
+    
+    var backgroundTask: UIBackgroundTaskIdentifier!
+    
     internal let registrar: FlutterPluginRegistrar
     
     init(registrar: FlutterPluginRegistrar) {
@@ -20,6 +23,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
 
   public func applicationWillResignActive(_ application: UIApplication) {
     if ( secured ) {
+        self.registerBackgroundTask()
         UIApplication.shared.ignoreSnapshotOnNextApplicationLaunch()
         if let window = UIApplication.shared.windows.filter({ (w) -> Bool in
                    return w.isHidden == false
@@ -33,6 +37,8 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 colorView.tag = 99699
                 colorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 colorView.backgroundColor = UIColor(white: 1, alpha: opacity)
+                window.addSubview(colorView)
+                window.bringSubviewToFront(colorView)
                 
                 let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
                 let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -41,18 +47,26 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 
                 blurEffectView.tag = 99698
 
-                window.addSubview(colorView)
                 window.addSubview(blurEffectView)
-                
-                window.bringSubviewToFront(colorView)
                 window.bringSubviewToFront(blurEffectView)
+                window.snapshotView(afterScreenUpdates: true)
+                RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
             }
         }
+    self.endBackgroundTask()
     }
-    RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
   }
-    public func applicationDidEnterBackground(_ application: UIApplication) {
-        RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
+   func registerBackgroundTask() {
+        self.backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+            self?.endBackgroundTask()
+        }
+        assert(self.backgroundTask != UIBackgroundTaskIdentifier.invalid)
+    }
+
+    func endBackgroundTask() {
+        print("Background task ended.")
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = UIBackgroundTaskIdentifier.invalid
     }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -73,8 +87,14 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
         if let window = UIApplication.shared.windows.filter({ (w) -> Bool in
                    return w.isHidden == false
         }).first, let view = window.viewWithTag(99699), let blurrView = window.viewWithTag(99698) {
+            UIView.animate(withDuration: 0.5, animations: {
+                view.alpha = 0.0
+                blurrView.alpha = 0.0
+            }, completion: { finished in
             view.removeFromSuperview()
             blurrView.removeFromSuperview()
+                
+            })
         }
     }
   }

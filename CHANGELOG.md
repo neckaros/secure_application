@@ -1,3 +1,7 @@
+## 3.5.2
+
+* Small improvements to IOS Code
+
 ## 3.5.1
 
 * Documentation tips
