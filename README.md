@@ -10,6 +10,8 @@ Pluggin in iOS is in swift
 
 Pluggin in Android is in Kotlin / AndroidX libraries
 
+Pluggin is also working for web
+
 ## Usage
 
 ### Installation
