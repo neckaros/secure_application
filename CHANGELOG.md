@@ -1,3 +1,8 @@
+## 3.6.0
+
+* Null safety
+* Web support
+
 ## 3.5.2
 
 * Small improvements to IOS Code

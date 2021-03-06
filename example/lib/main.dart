@@ -15,7 +15,7 @@ class _MyAppState extends State<MyApp> {
   double blurr = 20;
   double opacity = 0.6;
   StreamSubscription<bool> subLock;
-  List<String> history = List<String>();
+  List<String> history = [];
 
   @override
   void initState() {
@@ -75,11 +75,11 @@ class _MyAppState extends State<MyApp> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   child: Text('UNLOCK'),
                   onPressed: () => secureNotifier.authSuccess(unlock: true),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('FAIL AUTHENTICATION'),
                   onPressed: () => secureNotifier.authFailed(unlock: true),
                 ),
@@ -100,24 +100,24 @@ class _MyAppState extends State<MyApp> {
                         builder: (context, state, _) => state.secured
                             ? Column(
                                 children: <Widget>[
-                                  RaisedButton(
+                                  ElevatedButton(
                                     onPressed: () => valueNotifier.open(),
                                     child: Text('Open app'),
                                   ),
                                   state.paused
-                                      ? RaisedButton(
+                                      ? ElevatedButton(
                                           onPressed: () =>
                                               valueNotifier.unpause(),
                                           child: Text('resume security'),
                                         )
-                                      : RaisedButton(
+                                      : ElevatedButton(
                                           onPressed: () =>
                                               valueNotifier.pause(),
                                           child: Text('pause security'),
                                         ),
                                 ],
                               )
-                            : RaisedButton(
+                            : ElevatedButton(
                                 onPressed: () => valueNotifier.secure(),
                                 child: Text('Secure app'),
                               ),
