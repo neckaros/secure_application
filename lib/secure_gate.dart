@@ -12,12 +12,12 @@ import 'package:secure_application/secure_application_controller.dart';
 /// play with [SecureGate.opacity] and [SecureGate.blurr] to controle amount of child visible when the gate is active
 class SecureGate extends StatefulWidget {
   /// child to display if not locked
-  final Widget child;
+  final Widget? child;
 
   /// builder to display a child above the blurr window to allow your user to authenticate and unlock
   /// use the provided [SecureApplicationController] to unlock [SecureApplicationController] when user is authenticated
   final Widget Function(BuildContext context,
-      SecureApplicationController secureApplicationController) lockedBuilder;
+      SecureApplicationController? secureApplicationController)? lockedBuilder;
 
   /// amount of blurr to allow more or less of the child be visible when locked
   /// default to 20
@@ -28,7 +28,7 @@ class SecureGate extends StatefulWidget {
   final double opacity;
 
   const SecureGate({
-    Key key,
+    Key? key,
     this.child,
     this.blurr = 20,
     this.opacity = 0.6,
@@ -41,8 +41,8 @@ class SecureGate extends StatefulWidget {
 class _SecureGateState extends State<SecureGate>
     with SingleTickerProviderStateMixin {
   bool _lock = false;
-  AnimationController _gateVisibility;
-  SecureApplicationController _secureApplicationController;
+  late AnimationController _gateVisibility;
+  SecureApplicationController? _secureApplicationController;
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _SecureGateState extends State<SecureGate>
   void didChangeDependencies() {
     if (_secureApplicationController == null) {
       _secureApplicationController = SecureApplicationProvider.of(context);
-      _secureApplicationController.addListener(_sercureNotified);
+      _secureApplicationController!.addListener(_sercureNotified);
       _sercureNotified();
     }
     super.didChangeDependencies();
@@ -73,10 +73,10 @@ class _SecureGateState extends State<SecureGate>
   }
 
   void _sercureNotified() {
-    if (_lock == false && _secureApplicationController.locked == true) {
+    if (_lock == false && _secureApplicationController!.locked == true) {
       _lock = true;
       _gateVisibility.value = 1;
-    } else if (_lock == true && _secureApplicationController.locked == false) {
+    } else if (_lock == true && _secureApplicationController!.locked == false) {
       _lock = false;
       _gateVisibility.animateBack(0).orCancel;
     }
@@ -90,7 +90,7 @@ class _SecureGateState extends State<SecureGate>
 
   @override
   void dispose() {
-    _secureApplicationController.removeListener(_sercureNotified);
+    _secureApplicationController!.removeListener(_sercureNotified);
     _gateVisibility.dispose();
     super.dispose();
   }
@@ -98,7 +98,7 @@ class _SecureGateState extends State<SecureGate>
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      (children: <Widget?>[
         widget.child,
         if (_gateVisibility.value != 0)
           Positioned.fill(
@@ -114,8 +114,8 @@ class _SecureGateState extends State<SecureGate>
             ),
           ),
         if (_lock && widget.lockedBuilder != null)
-          widget.lockedBuilder(context, _secureApplicationController),
-      ],
+          widget.lockedBuilder!(context, _secureApplicationController),
+      ]) as List<Widget>,
     );
   }
 }

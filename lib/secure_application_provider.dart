@@ -6,25 +6,25 @@ import 'package:secure_application/secure_application_controller.dart';
 /// Used internally by [SecureApplication]
 class SecureApplicationProvider extends InheritedWidget {
   const SecureApplicationProvider({
-    Key key,
+    Key? key,
     this.secureData,
-    @required Widget child,
+    required Widget child,
   })  : assert(child != null),
         super(key: key, child: child);
 
-  final SecureApplicationController secureData;
+  final SecureApplicationController? secureData;
 
   /// get the [SecureApplicationController] of the context
   /// Use [listen] = false if you are outside of a widget builder (example in init state or in a bloc)
-  static SecureApplicationController of(BuildContext context,
+  static SecureApplicationController? of(BuildContext context,
       {bool listen = true}) {
     if (listen) {
       return context
-          .dependOnInheritedWidgetOfExactType<SecureApplicationProvider>()
+          .dependOnInheritedWidgetOfExactType<SecureApplicationProvider>()!
           .secureData;
     } else {
       var widget = context
-          .getElementForInheritedWidgetOfExactType<SecureApplicationProvider>()
+          .getElementForInheritedWidgetOfExactType<SecureApplicationProvider>()!
           .widget as SecureApplicationProvider;
       if (widget == null) {
         throw 'Unable to get SecureApplicationController';

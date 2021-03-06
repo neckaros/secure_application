@@ -29,29 +29,29 @@ class SecureApplication extends StatefulWidget {
   /// you can manage from here a global process for authorizing the user to see hidden content
   /// like maybe by using local_auth package
   final Future<SecureApplicationAuthenticationStatus> Function(
-      SecureApplicationController secureApplicationStateNotifier) onNeedUnlock;
+      SecureApplicationController? secureApplicationStateNotifier)? onNeedUnlock;
 
   /// will be called if authentication failed
-  final VoidCallback onAuthenticationFailed;
+  final VoidCallback? onAuthenticationFailed;
 
   /// will be called if authentication succeed
-  final VoidCallback onAuthenticationSucceed;
+  final VoidCallback? onAuthenticationSucceed;
 
   /// will be called if authentication succeed
-  final VoidCallback onLogout;
+  final VoidCallback? onLogout;
 
   /// the time in milliseconds we wait to remove the native protection screen
   /// usefull on iOS to let long app start
-  final int nativeRemoveDelay;
+  final int? nativeRemoveDelay;
 
   /// controller of the [SecureApplication]
   ///
   /// Can be set to provide your own controller to the application
   /// with your own starting values
-  final SecureApplicationController secureApplicationController;
+  final SecureApplicationController? secureApplicationController;
   const SecureApplication({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.onNeedUnlock,
     this.secureApplicationController,
     this.autoUnlockNative = true,
@@ -67,11 +67,11 @@ class SecureApplication extends StatefulWidget {
 
 class _SecureApplicationState extends State<SecureApplication>
     with WidgetsBindingObserver {
-  SecureApplicationController _secureApplicationController;
+  SecureApplicationController? _secureApplicationController;
 
-  StreamSubscription _authStreamSubscription;
+  StreamSubscription? _authStreamSubscription;
 
-  SecureApplicationController get secureApplicationController =>
+  SecureApplicationController? get secureApplicationController =>
       widget.secureApplicationController ?? _secureApplicationController;
   bool _removeNativeOnNextFrame = false;
   @override
@@ -81,26 +81,26 @@ class _SecureApplicationState extends State<SecureApplication>
           SecureApplicationController(SecureApplicationState());
     }
     _authStreamSubscription =
-        secureApplicationController.authenticationEvents.listen((s) {
+        secureApplicationController!.authenticationEvents.listen((s) {
       if (s == SecureApplicationAuthenticationStatus.FAILED) {
         if (widget.onAuthenticationFailed != null)
-          widget.onAuthenticationFailed();
+          widget.onAuthenticationFailed!();
       } else if (s == SecureApplicationAuthenticationStatus.SUCCESS) {
         if (widget.onAuthenticationSucceed != null)
-          widget.onAuthenticationSucceed();
+          widget.onAuthenticationSucceed!();
       } else if (s == SecureApplicationAuthenticationStatus.LOGOUT) {
-        if (widget.onLogout != null) widget.onLogout();
+        if (widget.onLogout != null) widget.onLogout!();
       }
     });
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
     _authStreamSubscription?.cancel();
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
   }
 
   @override
@@ -112,29 +112,29 @@ class _SecureApplicationState extends State<SecureApplication>
         } else {
           _removeNativeOnNextFrame = true;
         }
-        if (!secureApplicationController.paused) {
-          if (secureApplicationController.secured &&
-              secureApplicationController.value.locked) {
+        if (!secureApplicationController!.paused) {
+          if (secureApplicationController!.secured &&
+              secureApplicationController!.value.locked) {
             if (widget.onNeedUnlock != null) {
-              secureApplicationController.pause();
+              secureApplicationController!.pause();
               var authStatus =
-                  await widget.onNeedUnlock(secureApplicationController);
+                  await widget.onNeedUnlock!(secureApplicationController);
               if (authStatus != null) {
-                secureApplicationController.sendAuthenticationEvent(authStatus);
+                secureApplicationController!.sendAuthenticationEvent(authStatus);
               }
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                secureApplicationController.unpause();
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                secureApplicationController!.unpause();
               });
             }
           }
-          secureApplicationController.resumed();
+          secureApplicationController!.resumed();
         }
         super.didChangeAppLifecycleState(state);
         break;
       case AppLifecycleState.paused:
-        if (!secureApplicationController.paused) {
-          if (secureApplicationController.secured) {
-            secureApplicationController.lock();
+        if (!secureApplicationController!.paused) {
+          if (secureApplicationController!.secured) {
+            secureApplicationController!.lock();
           }
         }
         super.didChangeAppLifecycleState(state);
@@ -148,7 +148,7 @@ class _SecureApplicationState extends State<SecureApplication>
   @override
   Widget build(BuildContext context) {
     if (_removeNativeOnNextFrame && widget.autoUnlockNative) {
-      Future.delayed(Duration(milliseconds: widget.nativeRemoveDelay))
+      Future.delayed(Duration(milliseconds: widget.nativeRemoveDelay!))
           .then((_) => SecureApplicationNative.unlock());
 
       _removeNativeOnNextFrame = false;

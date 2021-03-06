@@ -15,10 +15,10 @@ class SecureApplicationState {
   });
 
   SecureApplicationState copyWith({
-    bool locked,
-    bool secured,
-    bool paused,
-    bool authenticated,
+    bool? locked,
+    bool? secured,
+    bool? paused,
+    bool? authenticated,
   }) {
     return SecureApplicationState(
       locked: locked ?? this.locked,
