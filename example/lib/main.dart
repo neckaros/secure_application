@@ -143,7 +143,7 @@ class _MyAppState extends State<MyApp> {
                         builder: (context, snapshot) =>
                             Text('Last auth status is: ${snapshot.data}'),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () => valueNotifier.lock(),
                         child: Text('manually lock'),
                       ),

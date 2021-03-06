@@ -9,8 +9,7 @@ class SecureApplicationProvider extends InheritedWidget {
     Key? key,
     this.secureData,
     required Widget child,
-  })  : assert(child != null),
-        super(key: key, child: child);
+  }) : super(key: key, child: child);
 
   final SecureApplicationController? secureData;
 
@@ -26,9 +25,6 @@ class SecureApplicationProvider extends InheritedWidget {
       var widget = context
           .getElementForInheritedWidgetOfExactType<SecureApplicationProvider>()!
           .widget as SecureApplicationProvider;
-      if (widget == null) {
-        throw 'Unable to get SecureApplicationController';
-      }
       return widget.secureData;
     }
   }
