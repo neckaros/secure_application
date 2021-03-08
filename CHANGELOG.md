@@ -1,7 +1,11 @@
+## 3.7.1
+
+* [WINDOWS] No also lock when user go to windows lock screen/switch user
+
 ## 3.7.0
 
 * Windows support (minimize window will lock)
-  
+
 ## 3.6.0
 
 * Null safety

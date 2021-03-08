@@ -12,7 +12,7 @@ Pluggin in Android is in Kotlin / AndroidX libraries
 
 Pluggin is also working for web 
 
-Plugin work for windows (will lock when you minimize the window)
+Plugin work for windows (will lock when you minimize the window and lock screen)
 
 ## Usage
 

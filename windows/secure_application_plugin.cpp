@@ -20,6 +20,7 @@ using namespace std;
 namespace
 {
   HHOOK flutterWindowMonitor = nullptr;
+  HWINEVENTHOOK switchHook = nullptr;
   std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>, std::default_delete<flutter::MethodChannel<flutter::EncodableValue>>> channel = nullptr;
 
   class SecureApplicationPlugin : public flutter::Plugin
@@ -33,6 +34,7 @@ namespace
 
   private:
     static LRESULT CALLBACK monitorFlutterWindowsProc(int nCode, WPARAM wParam, LPARAM lParam);
+    static void CALLBACK winEventProcCallback(HWINEVENTHOOK hWinEventHook, DWORD event, HWND hwnd, LONG idObject, LONG idChild, DWORD idEventThread, DWORD dwmsEventTime);
     // Called when a method is called on this plugin's channel from Dart.
     void HandleMethodCall(
         const flutter::MethodCall<flutter::EncodableValue> &method_call,
@@ -62,11 +64,16 @@ namespace
   {
     DWORD threadID = GetCurrentThreadId();
     flutterWindowMonitor = SetWindowsHookEx(WH_CBT, &monitorFlutterWindowsProc, NULL, threadID);
+    switchHook = SetWinEventHook(EVENT_SYSTEM_DESKTOPSWITCH, EVENT_SYSTEM_DESKTOPSWITCH, NULL, &winEventProcCallback, 0, 0, WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
   }
 
   SecureApplicationPlugin::~SecureApplicationPlugin()
   {
     UnhookWindowsHookEx(flutterWindowMonitor);
+  }
+  void CALLBACK SecureApplicationPlugin::winEventProcCallback(HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime)
+  {
+    channel->InvokeMethod("lock", nullptr);
   }
 
   LRESULT CALLBACK SecureApplicationPlugin::monitorFlutterWindowsProc(
