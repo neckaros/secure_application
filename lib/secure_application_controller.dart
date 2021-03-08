@@ -102,6 +102,10 @@ class SecureApplicationController
     }
   }
 
+  void lockIfSecured() {
+    if (value.secured) lock();
+  }
+
   /// Use when you want your user to see content under [SecureGate]
   void unlock() {
     SecureApplicationNative

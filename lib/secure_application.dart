@@ -101,7 +101,8 @@ class _SecureApplicationState extends State<SecureApplication>
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     SecureApplicationNative.registerForEvents(
-        secureApplicationController.lock, secureApplicationController.unlock);
+        secureApplicationController.lockIfSecured,
+        secureApplicationController.unlock);
   }
 
   @override

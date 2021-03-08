@@ -1,3 +1,7 @@
+## 3.7.0
+
+* Windows support (minimize window will lock)
+  
 ## 3.6.0
 
 * Null safety

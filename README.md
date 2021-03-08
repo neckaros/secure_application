@@ -10,7 +10,9 @@ Pluggin in iOS is in swift
 
 Pluggin in Android is in Kotlin / AndroidX libraries
 
-Pluggin is also working for web
+Pluggin is also working for web 
+
+Plugin work for windows (will lock when you minimize the window)
 
 ## Usage
 
