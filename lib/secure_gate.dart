@@ -98,8 +98,8 @@ class _SecureGateState extends State<SecureGate>
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget?>[
-        widget.child,
+      children: <Widget>[
+        widget.child!,
         if (_gateVisibility.value != 0)
           Positioned.fill(
             child: BackdropFilter(
@@ -115,7 +115,7 @@ class _SecureGateState extends State<SecureGate>
           ),
         if (_lock && widget.lockedBuilder != null)
           widget.lockedBuilder!(context, _secureApplicationController),
-      ] as List<Widget>,
+      ],
     );
   }
 }

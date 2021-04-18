@@ -1,3 +1,7 @@
+## 3.7.2
+
+* Fix a null safety error in the [SecureGate]
+
 ## 3.7.1
 
 * [WINDOWS] No also lock when user go to windows lock screen/switch user
