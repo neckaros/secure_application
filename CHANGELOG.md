@@ -1,3 +1,7 @@
+## 3.7.2
+
+* [BUGFIX] Fix a null safety issue (thanks @abhinandval and @lubritto )
+
 ## 3.7.1
 
 * [WINDOWS] No also lock when user go to windows lock screen/switch user
