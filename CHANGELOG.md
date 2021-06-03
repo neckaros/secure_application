@@ -1,3 +1,7 @@
+## 3.7.3
+
+* [BUGFIX] nativeRemoveDelay is null and that makes the app crash ( #16 )
+
 ## 3.7.2
 
 * [BUGFIX] Fix a null safety issue (thanks @abhinandval and @lubritto )
