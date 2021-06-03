@@ -43,7 +43,7 @@ class SecureApplication extends StatefulWidget {
 
   /// the time in milliseconds we wait to remove the native protection screen
   /// usefull on iOS to let long app start
-  final int? nativeRemoveDelay;
+  final int nativeRemoveDelay;
 
   /// controller of the [SecureApplication]
   ///
@@ -59,7 +59,7 @@ class SecureApplication extends StatefulWidget {
     this.onAuthenticationFailed,
     this.onAuthenticationSucceed,
     this.onLogout,
-    this.nativeRemoveDelay,
+    this.nativeRemoveDelay = 1000,
   }) : super(key: key);
 
   @override
@@ -156,7 +156,7 @@ class _SecureApplicationState extends State<SecureApplication>
   @override
   Widget build(BuildContext context) {
     if (_removeNativeOnNextFrame && widget.autoUnlockNative) {
-      Future.delayed(Duration(milliseconds: widget.nativeRemoveDelay!))
+      Future.delayed(Duration(milliseconds: widget.nativeRemoveDelay))
           .then((_) => SecureApplicationNative.unlock());
 
       _removeNativeOnNextFrame = false;
