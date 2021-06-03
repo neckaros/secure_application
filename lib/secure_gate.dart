@@ -12,7 +12,7 @@ import 'package:secure_application/secure_application_controller.dart';
 /// play with [SecureGate.opacity] and [SecureGate.blurr] to controle amount of child visible when the gate is active
 class SecureGate extends StatefulWidget {
   /// child to display if not locked
-  final Widget? child;
+  final Widget child;
 
   /// builder to display a child above the blurr window to allow your user to authenticate and unlock
   /// use the provided [SecureApplicationController] to unlock [SecureApplicationController] when user is authenticated
@@ -29,7 +29,7 @@ class SecureGate extends StatefulWidget {
 
   const SecureGate({
     Key? key,
-    this.child,
+    required this.child,
     this.blurr = 20,
     this.opacity = 0.6,
     this.lockedBuilder,
@@ -98,7 +98,7 @@ class _SecureGateState extends State<SecureGate>
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget?>[
+      children: <Widget>[
         widget.child,
         if (_gateVisibility.value != 0)
           Positioned.fill(
@@ -115,7 +115,7 @@ class _SecureGateState extends State<SecureGate>
           ),
         if (_lock && widget.lockedBuilder != null)
           widget.lockedBuilder!(context, _secureApplicationController),
-      ] as List<Widget>,
+      ],
     );
   }
 }
