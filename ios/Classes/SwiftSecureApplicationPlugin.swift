@@ -2,6 +2,13 @@ import Flutter
 import UIKit
 
 public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
+    @objc public static var blurAlpha: CGFloat = 1.0
+    @objc public static var getShieldView: () -> UIView? = empty
+    
+    private static func empty() -> UIView? {
+      return nil
+    }
+  
     var secured = false;
     var opacity: CGFloat = 0.2;
     
@@ -33,18 +40,25 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 window.bringSubviewToFront(existingBlurrView)
                 return
             } else {
-                let colorView = UIView(frame: window.bounds);
-                colorView.tag = 99699
-                colorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                colorView.backgroundColor = UIColor(white: 1, alpha: opacity)
-                window.addSubview(colorView)
-                window.bringSubviewToFront(colorView)
+                var view : UIView
+                if let customView = SwiftSecureApplicationPlugin.getShieldView() {
+                  view = customView
+                  view.frame = window.bounds
+                } else {
+                  view = UIView(frame: window.bounds);
+                  view.backgroundColor = UIColor(white: 1, alpha: opacity)
+                }
+                
+                view.tag = 99699
+                view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                window.addSubview(view)
+                window.bringSubviewToFront(view)
                 
                 let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
                 let blurEffectView = UIVisualEffectView(effect: blurEffect)
                 blurEffectView.frame = window.bounds
                 blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                
+                blurEffectView.alpha = SwiftSecureApplicationPlugin.blurAlpha
                 blurEffectView.tag = 99698
 
                 window.addSubview(blurEffectView)
