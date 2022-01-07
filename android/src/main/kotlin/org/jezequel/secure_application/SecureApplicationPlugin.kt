@@ -85,6 +85,9 @@ public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, Activity
     } else if (call.method == "open") {
       activity?.window?.clearFlags(LayoutParams.FLAG_SECURE)
         result.success(true)
+    } else if (call.method == "useLaunchImage") {
+      // This is currently not possible on Android, as far as I am aware
+      result.success(true)
     } else {
       result.success(true)
     }

@@ -45,4 +45,10 @@ class SecureApplicationNative {
   static Future opacity(double opacity) {
     return _channel.invokeMethod('opacity', {"opacity": opacity});
   }
+
+  static Future useLaunchImageIOS(bool useLaunchImage) {
+    return _channel.invokeMethod('useLaunchImage', {
+      'useLaunchImage': useLaunchImage,
+    });
+  }
 }
