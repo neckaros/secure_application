@@ -30,10 +30,10 @@ class SecureGate extends StatefulWidget {
   /// Whether to use the application's LaunchImage in the app switcher.
   ///
   /// For this to work, you MUST have a LaunchImage ImageSet in your iOS folder,
-  /// just like a newly generated flutter application. More info here:
-  /// https://docs.flutter.dev/development/ui/advanced/splash-screen#ios-launch-screen
+  /// just like a newly generated flutter application (at ios/Runner/Assets.xcassets/LaunchImage.imageset)
+  /// More info here: https://docs.flutter.dev/development/ui/advanced/splash-screen#ios-launch-screen
   ///
-  /// If this is true, [opacity] and [blurr] are ignored.
+  /// If this is true, [opacity] and [blurr] are ignored (iOS only).
   ///
   /// Only available on iOS. It is not possible on Android, as far as I'm aware
   final bool useLaunchImageIOS;
