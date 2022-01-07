@@ -129,7 +129,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                     blurrView.removeFromSuperview()
                 })
             }
-            
+
             if let imageView = window.viewWithTag(99697) {
                 UIView.animate(withDuration: 0.3, animations: {
                     imageView.alpha = 0.0
