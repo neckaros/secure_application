@@ -27,12 +27,24 @@ class SecureGate extends StatefulWidget {
   /// default to 0.6
   final double opacity;
 
+  /// Whether to use the application's LaunchImage in the app switcher.
+  ///
+  /// For this to work, you MUST have a LaunchImage ImageSet in your iOS folder,
+  /// just like a newly generated flutter application (at ios/Runner/Assets.xcassets/LaunchImage.imageset)
+  /// More info here: https://docs.flutter.dev/development/ui/advanced/splash-screen#ios-launch-screen
+  ///
+  /// If this is true, [opacity] and [blurr] are ignored (iOS only).
+  ///
+  /// Only available on iOS. It is not possible on Android, as far as I'm aware
+  final bool useLaunchImageIOS;
+
   const SecureGate({
     Key? key,
     required this.child,
     this.blurr = 20,
     this.opacity = 0.6,
     this.lockedBuilder,
+    this.useLaunchImageIOS = false,
   }) : super(key: key);
   @override
   _SecureGateState createState() => _SecureGateState();
@@ -50,6 +62,7 @@ class _SecureGateState extends State<SecureGate>
         AnimationController(vsync: this, duration: kThemeAnimationDuration * 2)
           ..addListener(_handleChange);
     SecureApplicationNative.opacity(widget.opacity);
+    SecureApplicationNative.useLaunchImageIOS(widget.useLaunchImageIOS);
 
     super.initState();
   }
@@ -69,6 +82,9 @@ class _SecureGateState extends State<SecureGate>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.opacity != widget.opacity) {
       SecureApplicationNative.opacity(widget.opacity);
+    }
+    if (oldWidget.useLaunchImageIOS != widget.useLaunchImageIOS) {
+      SecureApplicationNative.useLaunchImageIOS(widget.useLaunchImageIOS);
     }
   }
 
