@@ -1,3 +1,8 @@
+## 3.8.0
+
+* [BUGFIX] No signature of method: build_…android() applicable for argument types: (build_…_run_closure2) ( #24 ) thanks @ghostman2013
+* [BUGFIX] Fix null safety
+
 ## 3.7.3
 
 * [BUGFIX] nativeRemoveDelay is null and that makes the app crash ( #16 )
