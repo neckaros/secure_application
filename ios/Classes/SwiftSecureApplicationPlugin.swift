@@ -4,17 +4,17 @@ import UIKit
 public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
     var secured = false;
     var opacity: CGFloat = 0.2;
-    
+
     var backgroundTask: UIBackgroundTaskIdentifier!
-    
+
     internal let registrar: FlutterPluginRegistrar
-    
+
     init(registrar: FlutterPluginRegistrar) {
         self.registrar = registrar
       super.init()
       registrar.addApplicationDelegate(self)
     }
-    
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "secure_application", binaryMessenger: registrar.messenger())
     let instance = SwiftSecureApplicationPlugin(registrar: registrar)
@@ -39,12 +39,12 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 colorView.backgroundColor = UIColor(white: 1, alpha: opacity)
                 window.addSubview(colorView)
                 window.bringSubviewToFront(colorView)
-                
+
                 let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
                 let blurEffectView = UIVisualEffectView(effect: blurEffect)
                 blurEffectView.frame = window.bounds
                 blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                
+
                 blurEffectView.tag = 99698
 
                 window.addSubview(blurEffectView)
@@ -93,7 +93,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
             }, completion: { finished in
             view.removeFromSuperview()
             blurrView.removeFromSuperview()
-                
+
             })
         }
     }
