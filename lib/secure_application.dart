@@ -28,7 +28,7 @@ class SecureApplication extends StatefulWidget {
   ///
   /// you can manage from here a global process for authorizing the user to see hidden content
   /// like maybe by using local_auth package
-  final Future<SecureApplicationAuthenticationStatus> Function(
+  final Future<SecureApplicationAuthenticationStatus?>? Function(
           SecureApplicationController? secureApplicationStateNotifier)?
       onNeedUnlock;
 
@@ -128,7 +128,8 @@ class _SecureApplicationState extends State<SecureApplication>
               secureApplicationController.pause();
               var authStatus =
                   await widget.onNeedUnlock!(secureApplicationController);
-              secureApplicationController.sendAuthenticationEvent(authStatus);
+              if (authStatus != null)
+                secureApplicationController.sendAuthenticationEvent(authStatus);
 
               WidgetsBinding.instance!.addPostFrameCallback((_) {
                 secureApplicationController.unpause();

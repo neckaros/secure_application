@@ -11,10 +11,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool failedAuth;
+  bool failedAuth = false;
   double blurr = 20;
   double opacity = 0.6;
-  StreamSubscription<bool> subLock;
+  StreamSubscription<bool>? subLock;
   List<String> history = [];
 
   @override
@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    subLock.cancel();
+    subLock?.cancel();
     super.dispose();
   }
 
@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
         child: Builder(builder: (context) {
           if (subLock == null)
             subLock = SecureApplicationProvider.of(context, listen: false)
-                .lockEvents
+                ?.lockEvents
                 .listen((s) => history.add(
                     '${DateTime.now().toIso8601String()} - ${s ? 'locked' : 'unlocked'}'));
           return SecureGate(
@@ -77,11 +77,11 @@ class _MyAppState extends State<MyApp> {
               children: <Widget>[
                 ElevatedButton(
                   child: Text('UNLOCK'),
-                  onPressed: () => secureNotifier.authSuccess(unlock: true),
+                  onPressed: () => secureNotifier?.authSuccess(unlock: true),
                 ),
                 ElevatedButton(
                   child: Text('FAIL AUTHENTICATION'),
-                  onPressed: () => secureNotifier.authFailed(unlock: true),
+                  onPressed: () => secureNotifier?.authFailed(unlock: true),
                 ),
               ],
             )),
@@ -92,6 +92,9 @@ class _MyAppState extends State<MyApp> {
               body: Center(
                 child: Builder(builder: (context) {
                   var valueNotifier = SecureApplicationProvider.of(context);
+                  if (valueNotifier == null)
+                    throw new Exception(
+                        'Unable to find secure application context');
                   return ListView(
                     children: <Widget>[
                       Text('This is secure content'),
