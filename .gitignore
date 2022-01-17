@@ -6,6 +6,16 @@
 
 build/
 
+# IntelliJ
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+
 
 #Ignore thumbnails created by Windows
 Thumbs.db
