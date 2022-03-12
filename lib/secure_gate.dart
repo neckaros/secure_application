@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:secure_application/secure_application_controller.dart';
 import 'package:secure_application/secure_application_native.dart';
 import 'package:secure_application/secure_application_provider.dart';
-import 'package:secure_application/secure_application_controller.dart';
 
 /// it will display a blurr over your content if locked
 ///
@@ -38,6 +38,9 @@ class SecureGate extends StatefulWidget {
   /// Only available on iOS. It is not possible on Android, as far as I'm aware
   final bool useLaunchImageIOS;
 
+  /// The background color in the app switcher.
+  final Color? backgroundColor;
+
   const SecureGate({
     Key? key,
     required this.child,
@@ -45,7 +48,9 @@ class SecureGate extends StatefulWidget {
     this.opacity = 0.6,
     this.lockedBuilder,
     this.useLaunchImageIOS = false,
+    this.backgroundColor,
   }) : super(key: key);
+
   @override
   _SecureGateState createState() => _SecureGateState();
 }
@@ -63,6 +68,9 @@ class _SecureGateState extends State<SecureGate>
           ..addListener(_handleChange);
     SecureApplicationNative.opacity(widget.opacity);
     SecureApplicationNative.useLaunchImageIOS(widget.useLaunchImageIOS);
+    if (widget.backgroundColor != null) {
+      SecureApplicationNative.backgroundColor(widget.backgroundColor!);
+    }
 
     super.initState();
   }
@@ -85,6 +93,10 @@ class _SecureGateState extends State<SecureGate>
     }
     if (oldWidget.useLaunchImageIOS != widget.useLaunchImageIOS) {
       SecureApplicationNative.useLaunchImageIOS(widget.useLaunchImageIOS);
+    }
+    if (oldWidget.backgroundColor != widget.backgroundColor &&
+        widget.backgroundColor != null) {
+      SecureApplicationNative.backgroundColor(widget.backgroundColor!);
     }
   }
 
@@ -124,7 +136,7 @@ class _SecureGateState extends State<SecureGate>
                   sigmaY: widget.blurr * _gateVisibility.value),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.grey.shade200
+                    color: (widget.backgroundColor ?? Colors.grey.shade200)
                         .withOpacity(widget.opacity * _gateVisibility.value)),
               ),
             ),
