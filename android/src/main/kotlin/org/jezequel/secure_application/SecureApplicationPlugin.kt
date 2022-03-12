@@ -88,6 +88,9 @@ public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, Activity
     } else if (call.method == "useLaunchImage") {
       // This is currently not possible on Android, as far as I am aware
       result.success(true)
+    } else if (call.method == "backgroundColor") {
+      // This is currently not possible on Android, as far as I am aware
+      result.success(true)
     } else {
       result.success(true)
     }

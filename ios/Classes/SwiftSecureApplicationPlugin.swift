@@ -5,6 +5,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
     var secured = false;
     var opacity: CGFloat = 0.2;
     var useLaunchImage: Bool = false;
+    var backgroundColor: UIColor = UIColor.white;
 
     var backgroundTask: UIBackgroundTaskIdentifier!
 
@@ -36,8 +37,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 } else {
                     let imageView = UIImageView.init(frame: window.bounds)
                     imageView.tag = 99697
-                    imageView.backgroundColor = UIColor.black
-                    imageView.tintColor = UIColor.white
+                    imageView.backgroundColor = backgroundColor
                     imageView.clipsToBounds = true
                     imageView.contentMode = .center
                     imageView.image = UIImage(named: "LaunchImage")
@@ -59,7 +59,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                     let colorView = UIView(frame: window.bounds);
                     colorView.tag = 99699
                     colorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                    colorView.backgroundColor = UIColor(white: 1, alpha: opacity)
+                    colorView.backgroundColor = backgroundColor.withAlphaComponent(opacity)
                     window.addSubview(colorView)
                     window.bringSubviewToFront(colorView)
 
@@ -102,8 +102,12 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
             }
 
             if let useLaunchImage = args["useLaunchImage"] as? Bool {
-                 self.useLaunchImage = useLaunchImage
-             }
+                self.useLaunchImage = useLaunchImage
+            }
+
+            if let backgroundColor = args["backgroundColor"] as? String {
+                self.backgroundColor = hexStringToUIColor(hex: backgroundColor)
+            }
         }
     } else if (call.method == "open") {
         secured = false;
@@ -111,6 +115,11 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
         if let args = call.arguments as? Dictionary<String, Any>,
               let opacity = args["opacity"] as? NSNumber {
            self.opacity = opacity as! CGFloat
+       }
+    } else if (call.method == "backgroundColor") {
+        if let args = call.arguments as? Dictionary<String, Any>,
+              let backgroundColor = args["backgroundColor"] as? String {
+           self.backgroundColor = hexStringToUIColor(hex: backgroundColor)
        }
     } else if (call.method == "useLaunchImage") {
         if let args = call.arguments as? Dictionary<String, Any>,
@@ -139,5 +148,27 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
             }
         }
     }
+  }
+
+  func hexStringToUIColor (hex:String) -> UIColor {
+      var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+
+      if (cString.hasPrefix("#")) {
+          cString.remove(at: cString.startIndex)
+      }
+
+      if ((cString.count) != 6) {
+          return UIColor.gray
+      }
+
+      var rgbValue:UInt64 = 0
+      Scanner(string: cString).scanHexInt64(&rgbValue)
+
+      return UIColor(
+          red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+          green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+          blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+          alpha: CGFloat(1.0)
+      )
   }
 }
