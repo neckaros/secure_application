@@ -69,6 +69,8 @@ class _MyAppState extends State<MyApp> {
                 .listen((s) => history.add(
                     '${DateTime.now().toIso8601String()} - ${s ? 'locked' : 'unlocked'}'));
           return SecureGate(
+            useLaunchImageIOS: true,
+            backgroundColor: Colors.black,
             blurr: blurr,
             opacity: opacity,
             lockedBuilder: (context, secureNotifier) => Center(
