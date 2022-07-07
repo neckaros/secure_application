@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class SecureApplicationNative {
@@ -44,5 +44,17 @@ class SecureApplicationNative {
 
   static Future opacity(double opacity) {
     return _channel.invokeMethod('opacity', {"opacity": opacity});
+  }
+
+  static Future useLaunchImageIOS(bool useLaunchImage) {
+    return _channel.invokeMethod('useLaunchImage', {
+      'useLaunchImage': useLaunchImage,
+    });
+  }
+
+  static Future backgroundColor(Color color) {
+    return _channel.invokeMethod('backgroundColor', {
+      'backgroundColor': '#${color.value.toRadixString(16).substring(2, 8)}',
+    });
   }
 }
