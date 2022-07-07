@@ -89,104 +89,108 @@ class _MyAppState extends State<MyApp> {
               appBar: AppBar(
                 title: const Text('Secure Window Example'),
               ),
-              body: Center(
-                child: Builder(builder: (context) {
-                  var valueNotifier = SecureApplicationProvider.of(context);
-                  if (valueNotifier == null)
-                    throw new Exception(
-                        'Unable to find secure application context');
-                  return ListView(
-                    children: <Widget>[
-                      Text('This is secure content'),
-                      ValueListenableBuilder<SecureApplicationState>(
-                        valueListenable: valueNotifier,
-                        builder: (context, state, _) => state.secured
-                            ? Column(
-                                children: <Widget>[
-                                  ElevatedButton(
-                                    onPressed: () => valueNotifier.open(),
-                                    child: Text('Open app'),
-                                  ),
-                                  state.paused
-                                      ? ElevatedButton(
-                                          onPressed: () =>
-                                              valueNotifier.unpause(),
-                                          child: Text('resume security'),
-                                        )
-                                      : ElevatedButton(
-                                          onPressed: () =>
-                                              valueNotifier.pause(),
-                                          child: Text('pause security'),
-                                        ),
-                                ],
-                              )
-                            : ElevatedButton(
-                                onPressed: () => valueNotifier.secure(),
-                                child: Text('Secure app'),
-                              ),
-                      ),
-                      if (failedAuth == null)
-                        Text(
-                            'Lock the app then switch to another app and come back'),
-                      if (failedAuth != null)
-                        failedAuth
-                            ? Text(
-                                'Auth failed we cleaned sensitive data',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            : Text(
-                                'Auth success',
-                                style: TextStyle(color: Colors.green),
-                              ),
-                      FlutterLogo(
-                        size: width,
-                      ),
-                      StreamBuilder(
-                        stream: valueNotifier.authenticationEvents,
-                        builder: (context, snapshot) =>
-                            Text('Last auth status is: ${snapshot.data}'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => valueNotifier.lock(),
-                        child: Text('manually lock'),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Text('Blurr:'),
-                            Expanded(
-                              child: Slider(
-                                  value: blurr,
-                                  min: 0,
-                                  max: 100,
-                                  onChanged: (v) => setState(() => blurr = v)),
-                            ),
-                            Text(blurr.floor().toString()),
-                          ],
+              body: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Center(
+                  child: Builder(builder: (context) {
+                    var valueNotifier = SecureApplicationProvider.of(context);
+                    if (valueNotifier == null)
+                      throw new Exception(
+                          'Unable to find secure application context');
+                    return ListView(
+                      children: <Widget>[
+                        Text('This is secure content'),
+                        ValueListenableBuilder<SecureApplicationState>(
+                          valueListenable: valueNotifier,
+                          builder: (context, state, _) => state.secured
+                              ? Column(
+                                  children: <Widget>[
+                                    ElevatedButton(
+                                      onPressed: () => valueNotifier.open(),
+                                      child: Text('Open app'),
+                                    ),
+                                    state.paused
+                                        ? ElevatedButton(
+                                            onPressed: () =>
+                                                valueNotifier.unpause(),
+                                            child: Text('resume security'),
+                                          )
+                                        : ElevatedButton(
+                                            onPressed: () =>
+                                                valueNotifier.pause(),
+                                            child: Text('pause security'),
+                                          ),
+                                  ],
+                                )
+                              : ElevatedButton(
+                                  onPressed: () => valueNotifier.secure(),
+                                  child: Text('Secure app'),
+                                ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Text('opacity:'),
-                            Expanded(
-                              child: Slider(
-                                  value: opacity,
-                                  min: 0,
-                                  max: 1,
-                                  onChanged: (v) =>
-                                      setState(() => opacity = v)),
-                            ),
-                            Text((opacity * 100).floor().toString() + "%"),
-                          ],
+                        if (failedAuth == null)
+                          Text(
+                              'Lock the app then switch to another app and come back'),
+                        if (failedAuth != null)
+                          failedAuth
+                              ? Text(
+                                  'Auth failed we cleaned sensitive data',
+                                  style: TextStyle(color: Colors.red),
+                                )
+                              : Text(
+                                  'Auth success',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                        FlutterLogo(
+                          size: width,
                         ),
-                      ),
-                      ...history.map<Widget>((h) => Text(h)).toList(),
-                    ],
-                  );
-                }),
+                        StreamBuilder(
+                          stream: valueNotifier.authenticationEvents,
+                          builder: (context, snapshot) =>
+                              Text('Last auth status is: ${snapshot.data}'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => valueNotifier.lock(),
+                          child: Text('manually lock'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              Text('Blurr:'),
+                              Expanded(
+                                child: Slider(
+                                    value: blurr,
+                                    min: 0,
+                                    max: 100,
+                                    onChanged: (v) =>
+                                        setState(() => blurr = v)),
+                              ),
+                              Text(blurr.floor().toString()),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              Text('opacity:'),
+                              Expanded(
+                                child: Slider(
+                                    value: opacity,
+                                    min: 0,
+                                    max: 1,
+                                    onChanged: (v) =>
+                                        setState(() => opacity = v)),
+                              ),
+                              Text((opacity * 100).floor().toString() + "%"),
+                            ],
+                          ),
+                        ),
+                        ...history.map<Widget>((h) => Text(h)).toList(),
+                      ],
+                    );
+                  }),
+                ),
               ),
             ),
           );
