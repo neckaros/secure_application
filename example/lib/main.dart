@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * 0.8;
+    final double width = MediaQuery.of(context).size.width * 0.2;
     return MaterialApp(
       home: SecureApplication(
         nativeRemoveDelay: 1000,
@@ -127,19 +127,15 @@ class _MyAppState extends State<MyApp> {
                                   child: Text('Secure app'),
                                 ),
                         ),
-                        if (failedAuth == null)
-                          Text(
-                              'Lock the app then switch to another app and come back'),
-                        if (failedAuth != null)
-                          failedAuth
-                              ? Text(
-                                  'Auth failed we cleaned sensitive data',
-                                  style: TextStyle(color: Colors.red),
-                                )
-                              : Text(
-                                  'Auth success',
-                                  style: TextStyle(color: Colors.green),
-                                ),
+                        failedAuth
+                            ? Text(
+                                'Auth failed we cleaned sensitive data',
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : Text(
+                                'Auth success',
+                                style: TextStyle(color: Colors.green),
+                              ),
                         FlutterLogo(
                           size: width,
                         ),
