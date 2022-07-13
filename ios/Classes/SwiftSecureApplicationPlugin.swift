@@ -54,9 +54,7 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                 let blurEffectView = UIVisualEffectView(effect: blurEffect)
                 blurEffectView.frame = window.bounds
                 blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
                 blurEffectView.tag = BLUR_VIEW_TAG
-
                 window.addSubview(blurEffectView)
                 window.bringSubviewToFront(blurEffectView)
             }
@@ -66,7 +64,6 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                     window.bringSubviewToFront(existingImageView)
                     return
                 } else {
-                    
                     let imageView = UIImageView.init(frame: window.bounds)
                     imageView.tag = IMAGE_VIEW_TAG
                     imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -76,14 +73,13 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                     imageView.image = UIImage(named: "LaunchImage")
                     imageView.isMultipleTouchEnabled = true
                     imageView.translatesAutoresizingMaskIntoConstraints = false
-
                     window.addSubview(imageView)
                     window.bringSubviewToFront(imageView)
-
-                    window.snapshotView(afterScreenUpdates: true)
-                    RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
                 }
             }
+
+            window.snapshotView(afterScreenUpdates: true)
+            RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
         }
     self.endBackgroundTask()
     }
@@ -139,23 +135,23 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                    return w.isHidden == false
         }).first {
             if let colorView = window.viewWithTag(COLOR_VIEW_TAG) {
-                UIView.animate(withDuration: 0.5, animations: {
+                UIView.animate(withDuration: 0.4, animations: {
                     colorView.alpha = 0.0
                 }, completion: { finished in
                     colorView.removeFromSuperview()
                 })
             }
 
-            if let blurrView = window.viewWithTag(BLUR_VIEW_TAG) {
-                blurrView.removeFromSuperview()
-            }
-
             if let imageView = window.viewWithTag(IMAGE_VIEW_TAG) {
-                UIView.animate(withDuration: 0.3, animations: {
+                UIView.animate(withDuration: 0.4, animations: {
                     imageView.alpha = 0.0
                 }, completion: { finished in
                     imageView.removeFromSuperview()
                 })
+            }
+
+            if let blurrView = window.viewWithTag(BLUR_VIEW_TAG) {
+                blurrView.removeFromSuperview()
             }
         }
     }
