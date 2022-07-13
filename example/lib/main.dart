@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
                     '${DateTime.now().toIso8601String()} - ${s ? 'locked' : 'unlocked'}'));
           return SecureGate(
             useLaunchImageIOS: true,
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             blurr: blurr,
             opacity: opacity,
             lockedBuilder: (context, secureNotifier) => Center(

@@ -9,6 +9,10 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
 
     var backgroundTask: UIBackgroundTaskIdentifier!
 
+    let IMAGE_VIEW_TAG = 99697;
+    let BLUR_VIEW_TAG = 99698;
+    let COLOR_VIEW_TAG = 99699;
+
     internal let registrar: FlutterPluginRegistrar
 
     init(registrar: FlutterPluginRegistrar) {
@@ -30,14 +34,43 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
         if let window = UIApplication.shared.windows.filter({ (w) -> Bool in
                    return w.isHidden == false
         }).first {
+            if (!useLaunchImage) {
+                if let existingColorView = window.viewWithTag(COLOR_VIEW_TAG) {
+                    window.bringSubviewToFront(existingColorView)
+                } else {
+                    let colorView = UIView(frame: window.bounds);
+                    colorView.tag = COLOR_VIEW_TAG
+                    colorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    colorView.backgroundColor = backgroundColor.withAlphaComponent(opacity)
+                    window.addSubview(colorView)
+                    window.bringSubviewToFront(colorView)
+                }
+            }
+
+            if let existingBlurrView = window.viewWithTag(BLUR_VIEW_TAG) {
+                window.bringSubviewToFront(existingBlurrView)
+            } else {
+                let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
+                let blurEffectView = UIVisualEffectView(effect: blurEffect)
+                blurEffectView.frame = window.bounds
+                blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+                blurEffectView.tag = BLUR_VIEW_TAG
+
+                window.addSubview(blurEffectView)
+                window.bringSubviewToFront(blurEffectView)
+            }
+
             if (useLaunchImage) {
-                if let existingView = window.viewWithTag(99697) {
-                    window.bringSubviewToFront(existingView)
+                if let existingImageView = window.viewWithTag(IMAGE_VIEW_TAG) {
+                    window.bringSubviewToFront(existingImageView)
                     return
                 } else {
+                    
                     let imageView = UIImageView.init(frame: window.bounds)
-                    imageView.tag = 99697
-                    imageView.backgroundColor = backgroundColor
+                    imageView.tag = IMAGE_VIEW_TAG
+                    imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    imageView.backgroundColor = backgroundColor.withAlphaComponent(opacity)
                     imageView.clipsToBounds = true
                     imageView.contentMode = .center
                     imageView.image = UIImage(named: "LaunchImage")
@@ -47,31 +80,6 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
                     window.addSubview(imageView)
                     window.bringSubviewToFront(imageView)
 
-                    window.snapshotView(afterScreenUpdates: true)
-                    RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
-                }
-            } else {
-                if let existingView = window.viewWithTag(99699), let existingBlurrView = window.viewWithTag(99698) {
-                    window.bringSubviewToFront(existingView)
-                    window.bringSubviewToFront(existingBlurrView)
-                    return
-                } else {
-                    let colorView = UIView(frame: window.bounds);
-                    colorView.tag = 99699
-                    colorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                    colorView.backgroundColor = backgroundColor.withAlphaComponent(opacity)
-                    window.addSubview(colorView)
-                    window.bringSubviewToFront(colorView)
-
-                    let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
-                    let blurEffectView = UIVisualEffectView(effect: blurEffect)
-                    blurEffectView.frame = window.bounds
-                    blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
-                    blurEffectView.tag = 99698
-
-                    window.addSubview(blurEffectView)
-                    window.bringSubviewToFront(blurEffectView)
                     window.snapshotView(afterScreenUpdates: true)
                     RunLoop.current.run(until: Date(timeIntervalSinceNow:0.5))
                 }
@@ -130,16 +138,19 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
         if let window = UIApplication.shared.windows.filter({ (w) -> Bool in
                    return w.isHidden == false
         }).first {
-            if let colorView = window.viewWithTag(99699), let blurrView = window.viewWithTag(99698) {
+            if let colorView = window.viewWithTag(COLOR_VIEW_TAG) {
                 UIView.animate(withDuration: 0.5, animations: {
                     colorView.alpha = 0.0
                 }, completion: { finished in
                     colorView.removeFromSuperview()
-                    blurrView.removeFromSuperview()
                 })
             }
 
-            if let imageView = window.viewWithTag(99697) {
+            if let blurrView = window.viewWithTag(BLUR_VIEW_TAG) {
+                blurrView.removeFromSuperview()
+            }
+
+            if let imageView = window.viewWithTag(IMAGE_VIEW_TAG) {
                 UIView.animate(withDuration: 0.3, animations: {
                     imageView.alpha = 0.0
                 }, completion: { finished in
