@@ -1,10 +1,16 @@
 **previously nammed secure_window**
 
+Forked from [neckaros](https://github.com/neckaros/secure_application) & [stevenspiel](https://github.com/stevenspiel/secure_application)
+
+### Extended features:
+- Able to use LaunchImage in background in IOS
+- LaunchImage and BlurrEffect can work together
+
 # secure_application
 
 This plugin allow you to protect your application content from view on demand
 
-<img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_off.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_on.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/android_appswitcher.JPG" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/Gate_ios.jpg" height="400" />
+<img src="https://github.com/eddyuan/secure_application/blob/master/example/screenshot/launch_image.png?raw=true" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_off.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_on.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/android_appswitcher.JPG" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/Gate_ios.jpg" height="400" />
 
 Pluggin in iOS is in swift
 
@@ -19,6 +25,20 @@ Plugin work for windows (will lock when you minimize the window and lock screen)
 ### Installation
 
 Add `secure_application` as a dependency in your pubspec.yaml file ([what?](https://pub.dev/packages/secure_application#-installing-tab-)).
+To use this branch, in `pubspec.yaml`:
+```
+...
+dependencies:
+  ...
+  secure_application:
+    git:
+      url: https://github.com/eddyuan/secure_application
+```
+
+### Use useLaunchImageIOS
+Open your_project/ios in xcode, add LaunchImage if not already exist
+
+<img src="https://github.com/eddyuan/secure_application/blob/master/example/screenshot/xcode_setting.png?raw=true"/>
 
 ### Import
 
@@ -42,7 +62,10 @@ Put the content you want to protect in a SecureGate (could be the whole app)
 
 ```dart
 SecureGate(
+          useLaunchImageIOS: true,
           blurr: 5,
+          opacity: 0.5,
+          backgroundColor: Colors.white,
           lockedBuilder: (context, secureNotifier) => Center(
               child: RaisedButton(
             child: Text('test'),
