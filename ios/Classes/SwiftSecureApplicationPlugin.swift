@@ -36,6 +36,8 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
         }).first {
             if (!useLaunchImage) {
                 if let existingColorView = window.viewWithTag(COLOR_VIEW_TAG) {
+                    existingColorView.frame = window.bounds
+                    existingColorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                     window.bringSubviewToFront(existingColorView)
                 } else {
                     let colorView = UIView(frame: window.bounds);
@@ -48,6 +50,8 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
             }
 
             if let existingBlurrView = window.viewWithTag(BLUR_VIEW_TAG) {
+                existingBlurrView.frame = window.bounds
+                existingBlurrView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 window.bringSubviewToFront(existingBlurrView)
             } else {
                 let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
@@ -61,8 +65,12 @@ public class SwiftSecureApplicationPlugin: NSObject, FlutterPlugin {
 
             if (useLaunchImage) {
                 if let existingImageView = window.viewWithTag(IMAGE_VIEW_TAG) {
+                    existingImageView.frame = window.bounds
+                    existingImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    existingImageView.backgroundColor = backgroundColor.withAlphaComponent(opacity)
+                    existingImageView.clipsToBounds = true
+                    existingImageView.contentMode = .center
                     window.bringSubviewToFront(existingImageView)
-                    return
                 } else {
                     let imageView = UIImageView.init(frame: window.bounds)
                     imageView.tag = IMAGE_VIEW_TAG
