@@ -1,16 +1,22 @@
 **previously nammed secure_window**
 
+Forked from [neckaros](https://github.com/neckaros/secure_application) & [stevenspiel](https://github.com/stevenspiel/secure_application)
+
+### Extended features:
+- Able to use LaunchImage in background in IOS
+- LaunchImage and BlurrEffect can work together
+
 # secure_application
 
 This plugin allow you to protect your application content from view on demand
 
-<img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_off.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_on.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/android_appswitcher.JPG" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/Gate_ios.jpg" height="400" />
+<img src="https://github.com/eddyuan/secure_application/blob/master/example/screenshot/launch_image.png?raw=true" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_off.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/example/screenshot/gate_on.jpg" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/android_appswitcher.JPG" height="400" /> <img src="https://raw.githubusercontent.com/neckaros/secure_application/master/Gate_ios.jpg" height="400" />
 
 Pluggin in iOS is in swift
 
 Pluggin in Android is in Kotlin / AndroidX libraries
 
-Pluggin is also working for web 
+Pluggin is also working for web
 
 Plugin work for windows (will lock when you minimize the window and lock screen)
 
@@ -19,15 +25,31 @@ Plugin work for windows (will lock when you minimize the window and lock screen)
 ### Installation
 
 Add `secure_application` as a dependency in your pubspec.yaml file ([what?](https://pub.dev/packages/secure_application#-installing-tab-)).
+To use this branch, in `pubspec.yaml`:
+```
+...
+dependencies:
+  ...
+  secure_application:
+    git:
+      url: https://github.com/eddyuan/secure_application
+```
+
+### Use useLaunchImageIOS
+Open your_project/ios in xcode, add LaunchImage if not already exist
+
+<img src="https://github.com/eddyuan/secure_application/blob/master/example/screenshot/xcode_setting.png?raw=true"/>
 
 ### Import
 
 Import secure_application:
+
 ```dart
 import 'package:secure_application/secure_application.dart';
 ```
 
 Add a top level SecureApplication
+
 ```dart
 SecureApplication(
         onNeedUnlock: (secure) => print(
@@ -37,9 +59,13 @@ SecureApplication(
 ```
 
 Put the content you want to protect in a SecureGate (could be the whole app)
+
 ```dart
 SecureGate(
+          useLaunchImageIOS: true,
           blurr: 5,
+          opacity: 0.5,
+          backgroundColor: Colors.white,
           lockedBuilder: (context, secureNotifier) => Center(
               child: RaisedButton(
             child: Text('test'),
@@ -50,8 +76,11 @@ SecureGate(
 ```
 
 ## Tips
+
 ### Placement
+
 Best place to add the secure application is directly **inside** the MaterialApp by using its builder:
+
 ```dart
 class MyApp extends StatelessWidget {
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -131,12 +160,14 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-Notice 3 importants part here: 
-* Secure application is in MaterialApp/Builder so just above your app naviagator
-* I wrap the route i want to protect in onGenerateRoute with a **SecureGate** but you could put it anywhare you want if you only want to protect part of your page
-* Ask validation will display a dialog above everything to ask is you want to unlock app or not
+Notice 3 importants part here:
+
+- Secure application is in MaterialApp/Builder so just above your app naviagator
+- I wrap the route i want to protect in onGenerateRoute with a **SecureGate** but you could put it anywhare you want if you only want to protect part of your page
+- Ask validation will display a dialog above everything to ask is you want to unlock app or not
 
 ### react to failed auth
+
 ```dart
 class SecureReacting extends StatefulWidget {
   @override
@@ -175,13 +206,13 @@ class _SecureReactingState extends State<SecureReacting> {
 }
 ```
 
-Notice 2 importants part here: 
-* You are subscribing to a stream so don't forget to unsubscribe in onDispose
-* Since your animation from pop can take some time you might want also to have a locked variable here to display different content during transition
+Notice 2 importants part here:
 
-
+- You are subscribing to a stream so don't forget to unsubscribe in onDispose
+- Since your animation from pop can take some time you might want also to have a locked variable here to display different content during transition
 
 ## API Docs
+
 [API Reference](https://pub.dev/documentation/secure_application/latest/)
 
 ## Basic understanding
@@ -189,30 +220,35 @@ Notice 2 importants part here:
 The library is mainly controller via the [SecureApplicationController](https://pub.dev/documentation/secure_application/latest/secure_application_controller/SecureApplicationController-class.html) which can be
 
 ### secured
+
 if the user switch app or leave app the content will not be visible in the app switcher
 and when it goes back to the app it will **lock** it
 
 ### locked
+
 the child of the **SecureGate**s will be hidden bellow the blurry barrier
 
 ### paused
+
 even if secured **SecureGate**s will not activate when user comes back to the app
 
 ### authenticated
+
 last authentication status. To help you manage visibility of some elements of your UI
 depending on auth status
 
-* **secureApplicationController.authFailed()** will set it to **false**
-* **secureApplicationController.authLogout()** will set it to **false**
-* **secureApplicationController.authSuccess()** will set it to **true**
+- **secureApplicationController.authFailed()** will set it to **false**
+- **secureApplicationController.authLogout()** will set it to **false**
+- **secureApplicationController.authSuccess()** will set it to **true**
 
 You could use the authenticationEvents for the same purpose as it is a BehaviorSubject stream
 
 ### Streams
+
 There is two different BehaviorStream (emit last value when you subscribe):
 
-* **authenticationEvents**:  When there is a successful or unsucessful authentification (you can use it for example to clean your app if authentification is not successful)
-* **lockEvents**: Will be called when the application lock or unlock. Usefull for example to pause media when the app lock
+- **authenticationEvents**: When there is a successful or unsucessful authentification (you can use it for example to clean your app if authentification is not successful)
+- **lockEvents**: Will be called when the application lock or unlock. Usefull for example to pause media when the app lock
 
 ## Example
 
@@ -225,21 +261,25 @@ This tool does not impose a way to authenticate the user to give them back acces
 You are free to use your own Widget/Workflow to allow user to see their content once locked (cf **SecureApplication** widget argument [onNeedUnlock](https://pub.dev/documentation/secure_application/latest/secure_application/SecureApplication/onNeedUnlock.html))
 
 Therefore you can use any method you like:
-* Your own Widget for code Authentication
-* biometrics with the [local_auth](https://pub.dev/packages/local_auth) package
-* ...
+
+- Your own Widget for code Authentication
+- biometrics with the [local_auth](https://pub.dev/packages/local_auth) package
+- ...
 
 ## Android
+
 On Android as soon as you **secure** the application the user will not be able to capture the screen in the app (even if unlocked)
 We might give an option to allow screenshot as an option if need arise
 
 ## iOS
+
 Contrary to Android we create a native frosted view over your app content so that content is not visible in the app switcher.
 When the user gets back to the app we wait for ~500ms to remove this view to allow time for the app to woke and flutter gate to draw
 
 # Widgets
 
 ## SecureApplication
+
 [Api Doc](https://pub.dev/documentation/secure_application/latest/secure_application/SecureApplication-class.html)
 this widget is **required** and need to be a parent of any Gate
 it provides to its descendant a SecureApplicationProvider that allow you to secure or open the application
@@ -247,6 +287,7 @@ it provides to its descendant a SecureApplicationProvider that allow you to secu
 You can pass you own initialized SecureApplicationController if you want to set default values
 
 ## SecureGate
+
 [Api Doc](https://pub.dev/documentation/secure_application/latest/secure_gate/SecureGate-class.html)
 The **child** of this widget will be below a blurry barrier (control the amount of **blurr** and **opacity** with its arguments)
 if the provided SecureApplicationController is **locked**
@@ -254,20 +295,26 @@ if the provided SecureApplicationController is **locked**
 # Native workings
 
 ## Android
+
 When **locked** we set the secure flag to true
+
 ```kotlin
 activity?.window?.addFlags(LayoutParams.FLAG_SECURE)
 ```
+
 When **opened** we remove the secure flag
+
 ```kotlin
 activity?.window?.clearFlags(LayoutParams.FLAG_SECURE)
 ```
 
 ## iOS
+
 When app will become inactive we add a top view with a blurr filter
 We remove this app 500ms after the app become active to avoid your content form being breifly visible
 
 # Because we all want to see code in a Readme
+
 ```dart
 Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width * 0.8;

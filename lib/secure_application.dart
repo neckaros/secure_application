@@ -99,7 +99,7 @@ class _SecureApplicationState extends State<SecureApplication>
       }
     });
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     SecureApplicationNative.registerForEvents(
         secureApplicationController.lockIfSecured,
         secureApplicationController.unlock);
@@ -109,7 +109,7 @@ class _SecureApplicationState extends State<SecureApplication>
   void dispose() {
     _authStreamSubscription?.cancel();
     super.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -131,7 +131,7 @@ class _SecureApplicationState extends State<SecureApplication>
               if (authStatus != null)
                 secureApplicationController.sendAuthenticationEvent(authStatus);
 
-              WidgetsBinding.instance!.addPostFrameCallback((_) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
                 secureApplicationController.unpause();
               });
             }
