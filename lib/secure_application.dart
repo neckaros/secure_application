@@ -38,7 +38,7 @@ class SecureApplication extends StatefulWidget {
   /// will be called if authentication succeed
   final VoidCallback? onAuthenticationSucceed;
 
-  /// will be called if authentication succeed
+  /// will be called if user logout
   final VoidCallback? onLogout;
 
   /// the time in milliseconds we wait to remove the native protection screen
