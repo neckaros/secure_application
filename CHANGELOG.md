@@ -1,3 +1,5 @@
+## 3.8.1
+* [BUGFIX] Upgrade dependencies to be still compatible with [`local_auth`](https://pub.dev/packages/local_auth) package. Thanks, [Yann Cabral](https://github.com/yanncabral).
 ## 3.8.0
 
 * [BUGFIX] No signature of method: build_…android() applicable for argument types: (build_…_run_closure2) ( #24 ) thanks @ghostman2013
