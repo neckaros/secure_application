@@ -7,6 +7,7 @@ class SecureApplicationState {
   final bool secured;
   final bool paused;
   final bool authenticated;
+
   SecureApplicationState({
     this.locked = false,
     this.secured = false,

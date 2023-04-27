@@ -50,7 +50,7 @@ public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, Activity
   }
 
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     instance = SecureApplicationPlugin()
     val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "secure_application")
     channel.setMethodCallHandler(instance)
@@ -78,18 +78,26 @@ public class SecureApplicationPlugin: FlutterPlugin, MethodCallHandler, Activity
     }
   }
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "secure") {
-      activity?.window?.addFlags(LayoutParams.FLAG_SECURE)
-      result.success(true)
-    } else if (call.method == "open") {
-      activity?.window?.clearFlags(LayoutParams.FLAG_SECURE)
-        result.success(true)
-    } else {
-      result.success(true)
+  override fun onMethodCall(call: MethodCall, result: Result) {
+    when (call.method) {
+        "secure" -> {
+          activity?.window?.addFlags(LayoutParams.FLAG_SECURE)
+          result.success(true)
+        }
+        "open" -> {
+          activity?.window?.clearFlags(LayoutParams.FLAG_SECURE)
+          result.success(true)
+        }
+        "opacity" -> {
+          // Implementation available only on ios
+          result.success(true)
+        }
+        else -> {
+          result.notImplemented()
+        }
     }
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
   }
 }

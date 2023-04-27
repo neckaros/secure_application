@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:secure_application/secure_application.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -88,6 +89,13 @@ class _MyAppState extends State<MyApp> {
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('Secure Window Example'),
+                actions: [
+                  IconButton(
+                    onPressed: () =>
+                        launchUrl(Uri.parse('https://example.com')),
+                    icon: const Icon(Icons.share),
+                  ),
+                ],
               ),
               body: Center(
                 child: Builder(builder: (context) {
@@ -125,19 +133,19 @@ class _MyAppState extends State<MyApp> {
                                 child: Text('Secure app'),
                               ),
                       ),
-                      if (failedAuth == null)
+                      if (failedAuth)
                         Text(
                             'Lock the app then switch to another app and come back'),
-                      if (failedAuth != null)
-                        failedAuth
-                            ? Text(
-                                'Auth failed we cleaned sensitive data',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            : Text(
-                                'Auth success',
-                                style: TextStyle(color: Colors.green),
-                              ),
+                      if (failedAuth)
+                        Text(
+                          'Auth failed we cleaned sensitive data',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      else
+                        Text(
+                          'Auth success',
+                          style: TextStyle(color: Colors.green),
+                        ),
                       FlutterLogo(
                         size: width,
                       ),

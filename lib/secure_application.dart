@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:secure_application/secure_application_controller.dart';
 import 'package:secure_application/secure_application_native.dart';
 import 'package:secure_application/secure_application_provider.dart';
 import 'package:secure_application/secure_application_state.dart';
-import 'package:secure_application/secure_application_controller.dart';
 
 export './secure_application.dart';
-export './secure_gate.dart';
+export './secure_application_controller.dart';
 export './secure_application_provider.dart';
 export './secure_application_state.dart';
-export './secure_application_controller.dart';
+export './secure_gate.dart';
 
 /// Widget that will manage Secure Gates and visibility protection for your app content
 ///
@@ -22,6 +22,8 @@ class SecureApplication extends StatefulWidget {
 
   /// This will remove IOs glass effect from native automatically. To set to true (default) if you don't want to manage it
   /// you can play with the [nativeRemoveDelay] to avoid iOS unsecure flicker
+  @Deprecated(
+      'It is handled internally on ios getting the same behavior as on android. This flag will no longer have any effect')
   final bool autoUnlockNative;
 
   /// Method will be called when the user switch back to your application
@@ -83,7 +85,6 @@ class _SecureApplicationState extends State<SecureApplication>
     return _secureApplicationController!;
   }
 
-  bool _removeNativeOnNextFrame = false;
   @override
   void initState() {
     _authStreamSubscription =
@@ -116,17 +117,12 @@ class _SecureApplicationState extends State<SecureApplication>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        if (mounted) {
-          setState(() => _removeNativeOnNextFrame = true);
-        } else {
-          _removeNativeOnNextFrame = true;
-        }
         if (!secureApplicationController.paused) {
           if (secureApplicationController.secured &&
               secureApplicationController.value.locked) {
             if (widget.onNeedUnlock != null) {
               secureApplicationController.pause();
-              var authStatus =
+              final authStatus =
                   await widget.onNeedUnlock!(secureApplicationController);
               if (authStatus != null)
                 secureApplicationController.sendAuthenticationEvent(authStatus);
@@ -138,7 +134,6 @@ class _SecureApplicationState extends State<SecureApplication>
           }
           secureApplicationController.resumed();
         }
-        super.didChangeAppLifecycleState(state);
         break;
       case AppLifecycleState.paused:
         if (!secureApplicationController.paused) {
@@ -146,22 +141,15 @@ class _SecureApplicationState extends State<SecureApplication>
             secureApplicationController.lock();
           }
         }
-        super.didChangeAppLifecycleState(state);
         break;
       default:
-        super.didChangeAppLifecycleState(state);
         break;
     }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_removeNativeOnNextFrame && widget.autoUnlockNative) {
-      Future.delayed(Duration(milliseconds: widget.nativeRemoveDelay))
-          .then((_) => SecureApplicationNative.unlock());
-
-      _removeNativeOnNextFrame = false;
-    }
     return SecureApplicationProvider(
       secureData: secureApplicationController,
       child: widget.child,
