@@ -1,3 +1,11 @@
+## 4.0.0
+
+* Migrate to flutter 3.0
+* Upgrade rxdart (thanks @ariefwijaya )
+* Upgrade android dependencies
+* [BUGFIX] Null check fix (thanks @WeiCongcong )
+
+
 ## 3.8.0
 
 * [BUGFIX] No signature of method: build_…android() applicable for argument types: (build_…_run_closure2) ( #24 ) thanks @ghostman2013

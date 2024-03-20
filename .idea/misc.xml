@@ -4,4 +4,7 @@
     <type id="android" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="Android API 30 Platform" project-jdk-type="Android SDK" />
+  <component name="ProjectType">
+    <option name="id" value="io.flutter" />
+  </component>
 </project>
