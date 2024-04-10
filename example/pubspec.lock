@@ -145,12 +145,13 @@ packages:
     source: hosted
     version: "0.27.7"
   secure_application:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
-    version: "3.8.0"
+      name: secure_application
+      sha256: a830ff230c78c091a97dff193f4b3fe0d0786828a2df7dbd2dfa9b90d1e98fe7
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

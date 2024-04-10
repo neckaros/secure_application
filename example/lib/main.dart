@@ -125,19 +125,15 @@ class _MyAppState extends State<MyApp> {
                                 child: Text('Secure app'),
                               ),
                       ),
-                      if (failedAuth == null)
-                        Text(
-                            'Lock the app then switch to another app and come back'),
-                      if (failedAuth != null)
-                        failedAuth
-                            ? Text(
-                                'Auth failed we cleaned sensitive data',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            : Text(
-                                'Auth success',
-                                style: TextStyle(color: Colors.green),
-                              ),
+                      failedAuth
+                          ? Text(
+                              'Auth failed we cleaned sensitive data',
+                              style: TextStyle(color: Colors.red),
+                            )
+                          : Text(
+                              'Auth success',
+                              style: TextStyle(color: Colors.green),
+                            ),
                       FlutterLogo(
                         size: width,
                       ),
