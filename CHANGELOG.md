@@ -1,3 +1,7 @@
+# 3.8.1
+
+* Update rxdart constraints to `>=0.27.0 <0.28.0`
+
 ## 3.8.0
 
 * [BUGFIX] No signature of method: build_…android() applicable for argument types: (build_…_run_closure2) ( #24 ) thanks @ghostman2013
