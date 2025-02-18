@@ -13,8 +13,8 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  flutter_plugin_android_lifecycle: ^2.0.0
-  rxdart: ^0.27.3
+  flutter_plugin_android_lifecycle: ^2.0.23
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
