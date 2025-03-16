@@ -5,6 +5,9 @@ allprojects {
     }
 }
 
+ext.kotlin_version = '1.9.23'  // Latest version as of March 2025
+
+
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"

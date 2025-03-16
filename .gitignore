@@ -16,6 +16,8 @@ build/
 .idea/libraries
 .idea/caches
 
+*.cxx
+app/.cxx/*
 
 #Ignore thumbnails created by Windows
 Thumbs.db
