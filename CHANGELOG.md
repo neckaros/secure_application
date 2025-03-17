@@ -1,3 +1,9 @@
+## 4.1.0
+
+* Remove registrar This makes the plugin flutter 3.29.0 ready (thanks @Bassiuz )
+* Set Java SDK version to avoir issue with latest android studio
+* fix sample application
+
 ## 4.0.0
 
 * Migrate to flutter 3.0
