@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:secure_application/secure_application.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -88,6 +89,13 @@ class _MyAppState extends State<MyApp> {
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('Secure Window Example'),
+                actions: [
+                  IconButton(
+                    onPressed: () =>
+                        launchUrl(Uri.parse('https://example.com')),
+                    icon: const Icon(Icons.share),
+                  ),
+                ],
               ),
               body: Center(
                 child: Builder(builder: (context) {

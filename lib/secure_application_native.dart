@@ -6,13 +6,17 @@ class SecureApplicationNative {
   static const MethodChannel _channel =
       const MethodChannel('secure_application');
 
+  /// Implemented only in windows
   static void registerForEvents(VoidCallback lock, VoidCallback unlock) {
     _channel.setMethodCallHandler(
         (call) => secureApplicationHandler(call, lock, unlock));
   }
 
-  static Future<dynamic> secureApplicationHandler(
-      MethodCall methodCall, lock, unlock) async {
+  static Future<void> secureApplicationHandler(
+    MethodCall methodCall,
+    VoidCallback lock,
+    VoidCallback unlock,
+  ) async {
     switch (methodCall.method) {
       case 'lock':
         lock();
@@ -25,23 +29,28 @@ class SecureApplicationNative {
     }
   }
 
-  static Future secure() {
+  /// App will be secured and content will not be visible if user switch app
+  ///
+  /// on Android this will also prevent screenshot/screen recording
+  static Future<void> secure() {
     return _channel.invokeMethod('secure');
   }
 
-  static Future open() {
+  /// App will no longer be secured and content will be visible if user switch app
+  static Future<void> open() {
     return _channel.invokeMethod('open');
   }
 
-  static Future lock() {
-    return _channel.invokeMethod('lock');
-  }
+  /// Temporary prevent the app from locking if use leave and come back to the app
+  @Deprecated('It never did anything')
+  static Future<void> lock() async {}
 
-  static Future unlock() {
-    return _channel.invokeMethod('unlock');
-  }
+  /// Use when you want your user to see content
+  @Deprecated('It never did anything')
+  static Future<void> unlock() async {}
 
-  static Future opacity(double opacity) {
-    return _channel.invokeMethod('opacity', {"opacity": opacity});
+  /// Only work on ios
+  static Future<void> opacity(double opacity) {
+    return _channel.invokeMethod('opacity', {'opacity': opacity});
   }
 }

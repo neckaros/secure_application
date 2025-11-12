@@ -94,7 +94,6 @@ class SecureApplicationController
 
   /// content under [SecureGate] will not be visible
   void lock() {
-    SecureApplicationNative.lock();
     if (!value.locked) {
       value = value.copyWith(locked: true);
       notifyListeners();
@@ -108,8 +107,6 @@ class SecureApplicationController
 
   /// Use when you want your user to see content under [SecureGate]
   void unlock() {
-    SecureApplicationNative
-        .unlock(); //lock from native is removed when resumed but why not!
     if (value.locked) {
       value = value.copyWith(locked: false);
       notifyListeners();
@@ -119,7 +116,6 @@ class SecureApplicationController
 
   /// temporary prevent the app from locking if use leave and come back to the app
   void pause() {
-    SecureApplicationNative.lock();
     if (!value.paused) {
       value = value.copyWith(paused: true);
       notifyListeners();
@@ -142,7 +138,7 @@ class SecureApplicationController
 
   /// App will be secured and content will not be visible if user switch app
   ///
-  /// on Android this will also prevent scrensshot/screen recording
+  /// on Android this will also prevent screenshot/screen recording
   void secure() {
     SecureApplicationNative.secure();
     if (!value.secured) {

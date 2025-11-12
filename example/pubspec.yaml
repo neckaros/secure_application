@@ -15,6 +15,9 @@ dependencies:
 
   secure_application:
     path: ../
+
+  url_launcher: ^6.1.10
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

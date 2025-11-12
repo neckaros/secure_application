@@ -12,6 +12,14 @@
 * [BUGFIX] Null check fix (thanks @WeiCongcong )
 
 
+# 3.8.2
+
+* Update compileSdkVersion to 31 for issue with flutter 3.24.0 version upgrade
+
+# 3.8.1
+
+* Update rxdart constraints to `>=0.27.0 <0.28.0`
+
 ## 3.8.0
 
 * [BUGFIX] No signature of method: build_…android() applicable for argument types: (build_…_run_closure2) ( #24 ) thanks @ghostman2013
