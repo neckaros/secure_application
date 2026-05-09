@@ -13,8 +13,6 @@
 struct _SecureApplicationPlugin {
   GObject parent_instance;
   FlMethodChannel* channel;
-  GtkWindow* window;
-  gulong window_state_handler_id;
 };
 
 G_DEFINE_TYPE(SecureApplicationPlugin, secure_application_plugin,
@@ -46,28 +44,8 @@ static void method_call_cb(FlMethodChannel* channel, FlMethodCall* method_call,
   secure_application_plugin_handle_method_call(plugin, method_call);
 }
 
-// Mirrors the Windows SC_MINIMIZE hook: when the toplevel window is iconified,
-// invoke the Dart-side "lock" handler so the SecureGate overlay engages before
-// the user-restored window is repainted.
-static gboolean window_state_event_cb(GtkWidget* widget,
-                                      GdkEventWindowState* event,
-                                      gpointer user_data) {
-  SecureApplicationPlugin* self = SECURE_APPLICATION_PLUGIN(user_data);
-  if ((event->changed_mask & GDK_WINDOW_STATE_ICONIFIED) &&
-      (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED)) {
-    fl_method_channel_invoke_method(self->channel, "lock", nullptr, nullptr,
-                                    nullptr, nullptr);
-  }
-  return FALSE;
-}
-
 static void secure_application_plugin_dispose(GObject* object) {
   SecureApplicationPlugin* self = SECURE_APPLICATION_PLUGIN(object);
-  if (self->window != nullptr && self->window_state_handler_id != 0) {
-    g_signal_handler_disconnect(self->window, self->window_state_handler_id);
-    self->window_state_handler_id = 0;
-    self->window = nullptr;
-  }
   g_clear_object(&self->channel);
   G_OBJECT_CLASS(secure_application_plugin_parent_class)->dispose(object);
 }
@@ -91,16 +69,12 @@ void secure_application_plugin_register_with_registrar(
   fl_method_channel_set_method_call_handler(
       plugin->channel, method_call_cb, g_object_ref(plugin), g_object_unref);
 
-  FlView* view = fl_plugin_registrar_get_view(registrar);
-  if (view != nullptr) {
-    GtkWidget* toplevel = gtk_widget_get_toplevel(GTK_WIDGET(view));
-    if (GTK_IS_WINDOW(toplevel)) {
-      plugin->window = GTK_WINDOW(toplevel);
-      plugin->window_state_handler_id =
-          g_signal_connect(toplevel, "window-state-event",
-                           G_CALLBACK(window_state_event_cb), plugin);
-    }
-  }
+  // NOTE: We deliberately do NOT hook the GTK window-state-event to invoke
+  // "lock" on iconify the way the Windows plugin hooks SC_MINIMIZE. On Linux,
+  // local_auth has no platform implementation, so an app that engages
+  // SecureGate's locked state has no way to authenticate back out — the user
+  // is stranded on the lock screen. Apps that want explicit lock-on-minimize
+  // on Linux can call `lock()` themselves from a Dart-side WindowListener.
 
   g_object_unref(plugin);
 }
