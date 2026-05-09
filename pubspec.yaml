@@ -32,3 +32,5 @@ flutter:
         fileName: secure_application_web.dart 
       windows:
         pluginClass: SecureApplicationPlugin
+      linux:
+        pluginClass: SecureApplicationPlugin
